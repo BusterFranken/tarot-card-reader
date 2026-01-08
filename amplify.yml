@@ -6,6 +6,8 @@ frontend:
         - npm ci
     build:
       commands:
+        # Write environment variables to .env.production for runtime access
+        - echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
