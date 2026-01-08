@@ -247,7 +247,7 @@ export default function TarotPage() {
     try {
       const currentCard = selectedCards[currentCardIndex]
       
-      const response = await fetch('/api/tarot-reading', {
+      const response = await fetch('/api/tarot-reading-demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -332,7 +332,7 @@ export default function TarotPage() {
     setAiInterpretation('')
     
     try {
-      const response = await fetch('/api/tarot-reading', {
+      const response = await fetch('/api/tarot-reading-demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -546,6 +546,12 @@ export default function TarotPage() {
       </div>
 
       <div className="max-w-6xl w-full relative z-10">
+        {/* Demo Mode Banner */}
+        <div className="mb-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-6 py-3 rounded-xl shadow-lg text-center">
+          <p className="font-semibold">🎭 Demo Mode - No OpenAI Credits Used</p>
+          <p className="text-sm mt-1">Experience the full flow with pre-written interpretations</p>
+        </div>
+
         <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-12">
           <h1 className="text-4xl md:text-5xl font-light text-center text-gray-800 mb-2">
             Tarot Card Reading

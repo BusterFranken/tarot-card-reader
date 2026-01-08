@@ -1,86 +1,204 @@
-# Tarot Card Reader
+# ✨ Tarot Card Reader ✨
 
-A beautiful Next.js application featuring motivational quotes and authentic tarot card readings with a clean, modern design using Tailwind CSS.
+An interactive, AI-powered tarot card reading application built with Next.js, React, and OpenAI. Experience authentic tarot readings with real card images, personalized interpretations, and conversational AI guidance.
 
-## Features
+## 🌟 Features
 
-### Motivational Quotes
-- Fetches motivational quotes from the internet (quotable.io API)
-- Falls back to curated quotes if API is unavailable
-- Dynamic background images that match each quote
-- Minimal, clean design with Tailwind CSS
-- "New Quote" button to refresh quotes
-- Responsive design for mobile and desktop
+### Interactive Tarot Reading Experience
+- **Complete 78-card deck** (Major Arcana + Minor Arcana)
+- **Three-card spread**: Past, Present, Future
+- **Click-to-reveal cards** with smooth animations and hover effects
+- **AI-powered interpretations** using OpenAI GPT-4o-mini
+- **Conversational context** - each card reading builds on the previous
+- **Personal reflection prompts** - share your initial impressions before the AI reading
+- **Combined narrative** - AI weaves all three cards into a cohesive story
 
-### Tarot Card Reading
-- Complete 78-card tarot deck (Major Arcana + Minor Arcana)
-- Authentic three-card spread: Past, Present, Future
-- Real tarot card images with proper upright/reversed meanings
-- Card combination interpretations
-- Element-based readings (Fire, Water, Air, Earth)
-- Professional reading flow with shuffling animation
-- Individual card meanings plus combined reading interpretation
+### User Flow
+1. **Ask your question** - Focus your energy and intention
+2. **Shuffle the deck** - Watch as the cards align with your energy
+3. **Reveal each card** - Click to turn over the Past, Present, and Future cards
+4. **Share your insights** - Optionally share what you see before the AI reading
+5. **Receive guidance** - Get personalized AI interpretations for each card
+6. **Combined reading** - Understand how all three cards connect
 
-## Getting Started
+## 🚀 Getting Started
 
-First, install the dependencies:
+### Prerequisites
+- Node.js 18+ installed
+- OpenAI API key ([get one here](https://platform.openai.com/api-keys))
 
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/BusterFranken/tarot-card-reader.git
+cd tarot-card-reader
+```
+
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-Then, run the development server:
+3. **Set up environment variables**
 
+Create a `.env.local` file in the root directory:
+```bash
+OPENAI_API_KEY=sk-your-actual-api-key-here
+```
+
+See [ENV_SETUP.md](ENV_SETUP.md) for detailed instructions.
+
+4. **Run the development server**
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. **Open your browser**
 
-- Click **"Quotes"** tab for motivational quotes
-- Click **"Tarot Reading"** tab for tarot card readings
+Visit [http://localhost:3000](http://localhost:3000)
 
-## Tech Stack
+## 📦 Tech Stack
 
-- Next.js 14
-- React 18
-- TypeScript
-- Tailwind CSS
-- Next.js Image Optimization
+- **Next.js 14** - React framework with App Router
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **OpenAI API** - AI-powered interpretations
+- **Next.js Image Optimization** - Card image handling
 
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 ├── app/
 │   ├── api/
-│   │   ├── image/        # Background image generation
-│   │   └── quote/         # Quote fetching API
+│   │   └── tarot-reading/    # OpenAI integration API route
 │   ├── components/
-│   │   └── Navigation.tsx # Navigation tabs
+│   │   └── Navigation.tsx    # App header
 │   ├── data/
-│   │   └── tarotCards.ts # Complete tarot deck data
+│   │   └── tarotCards.ts     # Complete 78-card deck data
 │   ├── tarot/
-│   │   └── page.tsx      # Tarot reading page
-│   └── page.tsx          # Quotes page
-└── public/
-    └── cards/            # Tarot card images
+│   │   └── page.tsx          # Main tarot reading interface
+│   └── page.tsx              # Redirects to tarot
+├── public/
+│   └── cards/                # All 78 tarot card images + backs
+├── amplify.yml               # AWS Amplify build configuration
+└── ENV_SETUP.md              # Environment variable guide
 ```
 
-## How Tarot Readings Work
+## 🎴 How the Readings Work
 
-1. **Focus Your Question**: Enter a question or area of your life you seek guidance on
-2. **Shuffling**: The deck is shuffled while you focus on your question
-3. **Card Selection**: Three cards are drawn for Past, Present, and Future
-4. **Revelation**: Cards reveal one by one with their meanings
-5. **Interpretation**: See individual card meanings plus a combined reading
+### Card Selection
+- All 78 cards are shuffled randomly
+- Three cards are drawn for Past, Present, and Future positions
+- Each card has a 50% chance of appearing reversed
 
-The reading includes:
-- Upright/Reversed card meanings
-- Position-based interpretations (Past, Present, Future)
-- Element combinations (Fire, Water, Air, Earth)
-- Special card combination meanings
-- Overall reading synthesis
+### AI Interpretation
+The app uses **OpenAI's GPT-4o-mini** to provide:
+- Context-aware readings that build on previous cards
+- Integration of user's personal insights and reflections
+- Traditional tarot meanings blended with modern, relatable guidance
+- A final combined reading that weaves the story together
 
-## License
+### Conversation Context
+The AI maintains conversation history throughout the reading:
+1. Your question is always kept in context
+2. Each card revealed adds to the AI's understanding
+3. Your personal reflections inform the interpretation
+4. The combined reading synthesizes everything into a cohesive narrative
+
+## 💰 Cost Considerations
+
+Using GPT-4o-mini is very affordable:
+- **~$0.01 or less per complete reading** (4 API calls)
+- Input: $0.150 per 1M tokens
+- Output: $0.600 per 1M tokens
+
+See [ENV_SETUP.md](ENV_SETUP.md) for more details.
+
+## 🌐 Deploying to AWS Amplify
+
+This app is fully compatible with AWS Amplify hosting.
+
+### Quick Deploy
+
+1. **Push to GitHub**
+```bash
+git add .
+git commit -m "Initial commit"
+git push origin main
+```
+
+2. **Connect to AWS Amplify**
+   - Go to [AWS Amplify Console](https://console.aws.amazon.com/amplify)
+   - Click "New app" → "Host web app"
+   - Connect your GitHub repository
+   - Amplify will auto-detect Next.js and use the included `amplify.yml`
+
+3. **Add Environment Variables**
+   - In Amplify Console: App settings → Environment variables
+   - Add: `OPENAI_API_KEY` = `sk-your-key-here`
+   - Save and redeploy
+
+See [ENV_SETUP.md](ENV_SETUP.md) for detailed AWS setup instructions.
+
+### Build Configuration
+
+The included `amplify.yml` configures:
+- Automatic dependency installation
+- Next.js build optimization
+- Caching for faster builds
+- Static and dynamic content handling
+
+## 🔒 Security Notes
+
+- **Never commit `.env.local`** - It's in `.gitignore` by default
+- **Keep your OpenAI API key secret** - Only store in environment variables
+- **Set usage limits** in OpenAI dashboard to control costs
+- **Monitor usage** regularly in your OpenAI account
+
+## 🎨 Customization
+
+### Changing the AI Personality
+Edit the system prompt in `app/api/tarot-reading/route.ts`:
+```typescript
+{
+  role: "system",
+  content: `You are an experienced, warm, and insightful tarot card reader...`
+}
+```
+
+### Adjusting Response Length
+Change `max_tokens` in the OpenAI API call:
+```typescript
+max_tokens: 500,  // Increase for longer responses
+```
+
+### Adding More Cards or Spreads
+Edit `app/data/tarotCards.ts` to add cards or modify meanings.
+Update `app/tarot/page.tsx` to change the spread layout.
+
+## 📝 Development
+
+### Running Tests
+```bash
+npm run build  # Verify build works
+npm run lint   # Check for linting errors
+```
+
+### Local Development
+```bash
+npm run dev    # Start dev server with hot reload
+```
+
+## 🤝 Contributing
+
+Feel free to submit issues and pull requests!
+
+## 📄 License
 
 MIT
+
+---
+
+**Made with ✨ by BusterFranken**

@@ -3,7 +3,7 @@ import './globals.css'
 import Navigation from './components/Navigation'
 
 export const metadata: Metadata = {
-  title: 'Tarot Card Reader',
+  title: "Buster's Tarot Card Reader",
   description: 'Get inspired with random motivational quotes and receive authentic tarot card readings',
 }
 
@@ -21,4 +21,3 @@ export default function RootLayout({
     </html>
   )
 }
-
