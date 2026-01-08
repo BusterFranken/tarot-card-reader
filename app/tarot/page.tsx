@@ -30,6 +30,9 @@ export default function TarotPage() {
   const [wordCount, setWordCount] = useState(0)
   const [visitedSteps, setVisitedSteps] = useState<ReadingStep[]>(['question'])
   const [userInterpretations, setUserInterpretations] = useState<{[key: number]: string}>({})
+  const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
   const handleQuestionChange = (text: string) => {
     setQuestion(text)
@@ -547,7 +550,7 @@ export default function TarotPage() {
 
       <div className="max-w-6xl w-full relative z-10">
         <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-12">
-          <h1 className="text-4xl md:text-5xl font-light text-center text-gray-800 mb-2">
+          <h1 className="text-2xl md:text-4xl font-light text-center text-gray-800 mb-2">
             Tarot Card Reading
           </h1>
           <p className="text-center text-gray-600 mb-8 text-sm">
@@ -560,10 +563,9 @@ export default function TarotPage() {
                 <label className="block text-gray-700 font-medium mb-2 text-lg">
                   What question do you seek guidance on?
                 </label>
-                <div className="flex gap-2 mb-3 text-sm text-gray-400">
-                  <p>More context gives for a more accurate reading.</p>
-                  <p>Everything you write is completely private.</p>
-                </div>
+                <p className="mb-3 text-sm text-gray-400">
+                  More context gives for a more accurate reading. Everything you write is completely private.
+                </p>
                 <textarea
                   value={question}
                   onChange={(e) => handleQuestionChange(e.target.value)}
@@ -634,8 +636,8 @@ export default function TarotPage() {
                 </div>
               )}
 
-              {/* Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Cards - Desktop Grid */}
+              <div className="hidden md:grid grid-cols-3 gap-6">
                 {selectedCards.map((selectedCard, index) => (
                   <div
                     key={index}
@@ -704,6 +706,138 @@ export default function TarotPage() {
                   </div>
                 ))}
               </div>
+
+              {/* Cards - Mobile Carousel */}
+              <div className="md:hidden">
+                <div 
+                  className="relative overflow-hidden"
+                  onTouchStart={(e) => {
+                    setTouchStart(e.targetTouches[0].clientX)
+                  }}
+                  onTouchMove={(e) => {
+                    setTouchEnd(e.targetTouches[0].clientX)
+                  }}
+                  onTouchEnd={() => {
+                    if (touchStart - touchEnd > 75 && mobileCarouselIndex < 2) {
+                      setMobileCarouselIndex(mobileCarouselIndex + 1)
+                    }
+                    if (touchStart - touchEnd < -75 && mobileCarouselIndex > 0) {
+                      setMobileCarouselIndex(mobileCarouselIndex - 1)
+                    }
+                  }}
+                >
+                  <div 
+                    className="flex transition-transform duration-300 ease-out"
+                    style={{ transform: `translateX(-${mobileCarouselIndex * 100}%)` }}
+                  >
+                    {selectedCards.map((selectedCard, index) => (
+                      <div
+                        key={index}
+                        className="w-full flex-shrink-0 px-4"
+                      >
+                        <div
+                          onClick={() => handleCardClick(index)}
+                          className={`bg-gradient-to-br ${
+                            selectedCard.isRevealed
+                              ? selectedCard.isReversed
+                                ? 'from-red-50 to-orange-50 border-red-300'
+                                : 'from-blue-50 to-purple-50 border-blue-300'
+                              : 'from-gray-100 to-gray-200 border-gray-300'
+                          } border-2 rounded-xl p-4 shadow-lg flex flex-col items-center min-h-[500px] transition-all duration-300 ${
+                            step === 'ready' && index === currentCardIndex && !selectedCard.isRevealed
+                              ? 'cursor-pointer active:shadow-2xl active:scale-95'
+                              : ''
+                          }`}
+                        >
+                          {selectedCard.isRevealed ? (
+                            <>
+                              <div className="text-center mb-3 w-full">
+                                <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-2 ${
+                                  selectedCard.isReversed
+                                    ? 'bg-red-100 text-red-800'
+                                    : 'bg-blue-100 text-blue-800'
+                                }`}>
+                                  {selectedCard.isReversed ? 'REVERSED' : 'UPRIGHT'}
+                                </div>
+                                <h3 className="text-lg font-bold text-gray-800 mb-1">{selectedCard.card.name}</h3>
+                                <p className="text-xs font-medium text-gray-600">{selectedCard.position}</p>
+                              </div>
+                              
+                              <div className="relative w-full aspect-[2/3] mb-4">
+                                <Image
+                                  src={selectedCard.card.image}
+                                  alt={selectedCard.card.name}
+                                  fill
+                                  className={`object-contain transition-all duration-500 ${selectedCard.isReversed ? 'rotate-180' : ''}`}
+                                  sizes="100vw"
+                                  unoptimized
+                                />
+                              </div>
+                            </>
+                          ) : (
+                            <div className="flex items-center justify-center h-full flex-col w-full">
+                              <div className="relative w-full aspect-[2/3] mb-4">
+                                <Image
+                                  src="/cards/CardBacks.png"
+                                  alt="Card Back"
+                                  fill
+                                  className="object-contain"
+                                  sizes="100vw"
+                                  unoptimized
+                                />
+                              </div>
+                              <p className="text-sm text-gray-500 font-medium">{selectedCard.position}</p>
+                              {step === 'ready' && index === currentCardIndex && (
+                                <p className="text-xs text-purple-600 mt-2">Tap to reveal</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Carousel Indicators */}
+                <div className="flex justify-center gap-2 mt-4">
+                  {selectedCards.map((card, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setMobileCarouselIndex(index)}
+                      className={`transition-all duration-300 ${
+                        index === mobileCarouselIndex
+                          ? 'w-8 h-3 bg-purple-600 rounded-full'
+                          : 'w-3 h-3 bg-purple-300 rounded-full'
+                      }`}
+                      aria-label={`View ${card.position} card`}
+                    >
+                      <span className="sr-only">{card.position}</span>
+                    </button>
+                  ))}
+                </div>
+                
+                {/* Swipe hint */}
+                <p className="text-center text-sm text-gray-500 mt-2 animate-pulse">
+                  ← Swipe to view all cards →
+                </p>
+              </div>
+
+              {/* Scroll hint - Mobile only */}
+              {(step.includes('prompt') || step.includes('reading')) && (
+                <div className="md:hidden flex justify-center mt-4">
+                  <div className="flex flex-col items-center animate-bounce">
+                    <p className="text-sm text-purple-600 font-medium mb-1">Scroll down</p>
+                    <svg 
+                      className="w-6 h-6 text-purple-600" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              )}
 
               {/* User interpretation prompt */}
               {step.includes('prompt') && (

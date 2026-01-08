@@ -6,22 +6,22 @@ export default function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-purple-900/90 backdrop-blur-md shadow-lg border-b border-purple-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          <div className="flex-1"></div>
-          <h1 className="text-2xl font-light text-white tracking-wide flex-1 text-center">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-2 sm:py-4">
+          <div className="hidden sm:block flex-1"></div>
+          <h1 className="text-base sm:text-2xl font-light text-white tracking-wide flex-1 sm:flex-1 text-center leading-tight whitespace-nowrap">
             ✨ Buster's Tarot Card Reader ✨
           </h1>
-          <div className="flex-1 flex justify-end">
+          <div className="flex-shrink-0 sm:flex-1 flex justify-end">
             <a
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-sm font-medium"
+              className="flex items-center gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-xs sm:text-sm font-medium"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className="h-5 w-5" 
+                className="h-4 w-4 sm:h-5 sm:w-5" 
                 viewBox="0 0 24 24" 
                 fill="currentColor"
               >
