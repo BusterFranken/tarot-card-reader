@@ -1,17 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
-
-// Lazy initialization of OpenAI client
-function getOpenAIClient() {
-  return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-}
 
 export async function POST(request: NextRequest) {
-  const openai = getOpenAIClient()
   try {
-    const { card, question, userInterpretation, conversationHistory, position, isReversed, allCards } = await request.json()
+    // Check if API key exists first
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      return NextResponse.json(
+        { 
+          error: 'OpenAI API key not configured', 
+          details: 'OPENAI_API_KEY environment variable is missing or empty',
+          keyPresent: false 
+        },
+        { status: 500 }
+      )
+    }
+
+    // Dynamically import OpenAI to catch any import errors
+    let OpenAI
+    try {
+      OpenAI = (await import('openai')).default
+    } catch (importError: any) {
+      return NextResponse.json(
+        { 
+          error: 'Failed to load OpenAI library', 
+          details: importError.message 
+        },
+        { status: 500 }
+      )
+    }
+
+    // Initialize OpenAI client
+    let openai
+    try {
+      openai = new OpenAI({ apiKey })
+    } catch (initError: any) {
+      return NextResponse.json(
+        { 
+          error: 'Failed to initialize OpenAI client', 
+          details: initError.message 
+        },
+        { status: 500 }
+      )
+    }
+
+    // Parse request body
+    let body
+    try {
+      body = await request.json()
+    } catch (parseError: any) {
+      return NextResponse.json(
+        { 
+          error: 'Failed to parse request body', 
+          details: parseError.message 
+        },
+        { status: 400 }
+      )
+    }
+
+    const { card, question, userInterpretation, conversationHistory, position, isReversed, allCards } = body
     
     // Build the conversation messages
     const messages: any[] = [
@@ -63,12 +109,40 @@ export async function POST(request: NextRequest) {
       content: userPrompt
     })
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: messages,
-      temperature: 0.7,
-      max_tokens: 500,
-    })
+    // Call OpenAI API
+    let completion
+    try {
+      completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 500,
+      })
+    } catch (apiError: any) {
+      console.error('OpenAI API call error:', apiError)
+      
+      // Provide helpful error messages based on error type
+      let errorMessage = 'Failed to generate interpretation.'
+      if (apiError.code === 'invalid_api_key') {
+        errorMessage = 'OpenAI API key is invalid.'
+      } else if (apiError.code === 'insufficient_quota') {
+        errorMessage = 'OpenAI account needs billing setup. Please add a payment method at platform.openai.com/account/billing'
+      } else if (apiError.status === 429) {
+        errorMessage = 'Rate limit exceeded. Please wait a moment and try again.'
+      }
+      
+      return NextResponse.json(
+        { 
+          error: errorMessage, 
+          details: apiError.message,
+          code: apiError.code,
+          status: apiError.status,
+          keyPresent: true,
+          keyPreview: `${apiKey.substring(0, 10)}...${apiKey.substring(apiKey.length - 4)}`
+        },
+        { status: 500 }
+      )
+    }
 
     const interpretation = completion.choices[0]?.message?.content || "I'm having trouble connecting with the cards right now. Please try again."
 
@@ -86,20 +160,14 @@ export async function POST(request: NextRequest) {
       conversationHistory: updatedHistory
     })
   } catch (error: any) {
-    console.error('OpenAI API error:', error)
-    
-    // Provide helpful error messages
-    let errorMessage = 'Failed to generate interpretation.'
-    if (error.code === 'invalid_api_key') {
-      errorMessage = 'OpenAI API key is missing or invalid. Please check your environment variables.'
-    } else if (error.code === 'insufficient_quota') {
-      errorMessage = 'OpenAI account needs billing setup. Please add a payment method at platform.openai.com/account/billing'
-    } else if (error.status === 429) {
-      errorMessage = 'Rate limit exceeded. Please wait a moment and try again.'
-    }
-    
+    // Catch-all for any unexpected errors
+    console.error('Unexpected error in tarot-reading API:', error)
     return NextResponse.json(
-      { error: errorMessage, details: error.message },
+      { 
+        error: 'An unexpected error occurred', 
+        details: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      },
       { status: 500 }
     )
   }
