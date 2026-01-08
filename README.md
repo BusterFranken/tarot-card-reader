@@ -2,6 +2,10 @@
 
 An interactive, AI-powered tarot card reading application built with Next.js, React, and OpenAI. Experience authentic tarot readings with real card images, personalized interpretations, and conversational AI guidance.
 
+Live version: www.tarotread.help 
+
+If you copy it, you have to use your own OpenAI key saved in your .env.local :)
+
 ## 🌟 Features
 
 ### Interactive Tarot Reading Experience
