@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { allCards, TarotCard } from '../data/tarotCards'
 import jsPDF from 'jspdf'
+import { usePersistedState, clearPersistedState } from '../hooks/usePersistedState'
+import VoiceInputButton from '../components/VoiceInputButton'
 
 interface SelectedCard {
   card: TarotCard
@@ -15,21 +17,24 @@ interface SelectedCard {
 type ReadingStep = 'question' | 'shuffling' | 'ready' | 'past-prompt' | 'past-reading' | 'present-prompt' | 'present-reading' | 'future-prompt' | 'future-reading' | 'combined-reading'
 
 export default function TarotPage() {
-  const [step, setStep] = useState<ReadingStep>('question')
-  const [question, setQuestion] = useState('')
-  const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([])
+  // Persisted state - survives page reloads
+  const [step, setStep] = usePersistedState<ReadingStep>('step', 'question')
+  const [question, setQuestion] = usePersistedState('question', '')
+  const [selectedCards, setSelectedCards] = usePersistedState<SelectedCard[]>('selectedCards', [])
+  const [currentCardIndex, setCurrentCardIndex] = usePersistedState('currentCardIndex', 0)
+  const [aiInterpretation, setAiInterpretation] = usePersistedState('aiInterpretation', '')
+  const [conversationHistory, setConversationHistory] = usePersistedState<any[]>('conversationHistory', [])
+  const [cardReadings, setCardReadings] = usePersistedState<{[key: number]: string}>('cardReadings', {})
+  const [visitedSteps, setVisitedSteps] = usePersistedState<ReadingStep[]>('visitedSteps', ['question'])
+  const [userInterpretations, setUserInterpretations] = usePersistedState<{[key: number]: string}>('userInterpretations', {})
+  const [wordCount, setWordCount] = usePersistedState('wordCount', 0)
+  const [userInterpretation, setUserInterpretation] = usePersistedState('userInterpretation', '')
+
+  // Transient state - doesn't need to persist
   const [shufflingProgress, setShufflingProgress] = useState(0)
-  const [currentCardIndex, setCurrentCardIndex] = useState(0)
-  const [userInterpretation, setUserInterpretation] = useState('')
-  const [aiInterpretation, setAiInterpretation] = useState('')
-  const [conversationHistory, setConversationHistory] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const [cardReadings, setCardReadings] = useState<{[key: number]: string}>({})
   const [isDivining, setIsDivining] = useState(false)
-  const [wordCount, setWordCount] = useState(0)
-  const [visitedSteps, setVisitedSteps] = useState<ReadingStep[]>(['question'])
-  const [userInterpretations, setUserInterpretations] = useState<{[key: number]: string}>({})
   const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
@@ -322,7 +327,9 @@ export default function TarotPage() {
   const moveToNextCard = () => {
     setUserInterpretation('')
     setAiInterpretation('')
-    setCurrentCardIndex(currentCardIndex + 1)
+    const nextIndex = currentCardIndex + 1
+    setCurrentCardIndex(nextIndex)
+    setMobileCarouselIndex(nextIndex)
     setStep('ready')
     markStepVisited('ready')
   }
@@ -364,9 +371,32 @@ export default function TarotPage() {
   const downloadPDF = () => {
     const doc = new jsPDF()
     const pageWidth = doc.internal.pageSize.getWidth()
+    const pageHeight = doc.internal.pageSize.getHeight()
     const margin = 20
     const maxWidth = pageWidth - 2 * margin
+    const footerHeight = 28
+    const bottomLimit = pageHeight - footerHeight
     let yPos = 20
+
+    const normalizeTextForPdf = (text: string) => {
+      // Prevent long unbroken strings from spilling into margins.
+      return text.replace(/(\S{30})/g, '$1 ')
+    }
+
+    const ensureSpace = (heightNeeded: number) => {
+      if (yPos + heightNeeded > bottomLimit) {
+        doc.addPage()
+        yPos = 20
+      }
+    }
+
+    const writeLines = (lines: string[], x: number, lineHeight: number) => {
+      lines.forEach((line) => {
+        ensureSpace(lineHeight)
+        doc.text(line, x, yPos)
+        yPos += lineHeight
+      })
+    }
 
     // Title
     doc.setFontSize(22)
@@ -381,7 +411,7 @@ export default function TarotPage() {
     yPos += 7
     doc.setFontSize(11)
     doc.setFont('helvetica', 'italic')
-    const questionLines = doc.splitTextToSize(question, maxWidth)
+    const questionLines = doc.splitTextToSize(normalizeTextForPdf(question), maxWidth)
     doc.text(questionLines, margin, yPos)
     yPos += questionLines.length * 7 + 10
 
@@ -458,7 +488,7 @@ export default function TarotPage() {
       doc.setFontSize(9)
       doc.setFont('helvetica', 'normal')
       const meaning = card.isReversed ? card.card.reversed : card.card.upright
-      const meaningLines = doc.splitTextToSize(meaning, maxWidth)
+      const meaningLines = doc.splitTextToSize(normalizeTextForPdf(meaning), maxWidth)
       doc.text(meaningLines, margin + 5, yPos)
       yPos += meaningLines.length * 5 + 8
     })
@@ -479,9 +509,9 @@ export default function TarotPage() {
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
       const reading = cardReadings[index] || 'Reading not available'
-      const readingLines = doc.splitTextToSize(reading, maxWidth)
-      doc.text(readingLines, margin, yPos)
-      yPos += readingLines.length * 5 + 10
+      const readingLines = doc.splitTextToSize(normalizeTextForPdf(reading), maxWidth)
+      writeLines(readingLines, margin, 5)
+      yPos += 10
     })
 
     // Combined reading
@@ -497,8 +527,8 @@ export default function TarotPage() {
 
     doc.setFontSize(10)
     doc.setFont('helvetica', 'normal')
-    const combinedLines = doc.splitTextToSize(aiInterpretation, maxWidth)
-    doc.text(combinedLines, margin, yPos)
+    const combinedLines = doc.splitTextToSize(normalizeTextForPdf(aiInterpretation), maxWidth)
+    writeLines(combinedLines, margin, 5)
 
     // Footer on all pages
     const totalPages = doc.getNumberOfPages()
@@ -519,6 +549,10 @@ export default function TarotPage() {
   }
 
   const resetReading = () => {
+    // Clear all persisted state from localStorage
+    clearPersistedState()
+    
+    // Reset all state to initial values
     setStep('question')
     setQuestion('')
     setSelectedCards([])
@@ -566,13 +600,21 @@ export default function TarotPage() {
                 <p className="mb-3 text-sm text-gray-400">
                   More context gives for a more accurate reading. Everything you write is completely private.
                 </p>
-                <textarea
-                  value={question}
-                  onChange={(e) => handleQuestionChange(e.target.value)}
-                  placeholder="What do I need to know about my career path? What concerns me? What am I hoping to understand?"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                  rows={5}
-                />
+                <div className="relative">
+                  <textarea
+                    value={question}
+                    onChange={(e) => handleQuestionChange(e.target.value)}
+                    placeholder="What do I need to know about my career path? What concerns me? What am I hoping to understand?"
+                    className="w-full px-4 py-3 pb-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    rows={5}
+                  />
+                  <div className="absolute right-2 bottom-2 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-sm border border-gray-200">
+                    <span className="text-xs text-gray-400 hidden sm:inline">Voice input</span>
+                    <VoiceInputButton
+                      onTranscript={(text) => handleQuestionChange(question ? `${question} ${text}` : text)}
+                    />
+                  </div>
+                </div>
                 
                 {/* Word count progress bar */}
                 <div className="mt-3">
@@ -856,14 +898,23 @@ export default function TarotPage() {
                     Before I share the traditional interpretation, what springs to mind when you look at this card? 
                     What catches your attention in relation to your question?
                   </p>
-                  <textarea
-                    value={userInterpretation}
-                    onChange={(e) => setUserInterpretation(e.target.value)}
-                    placeholder="Share your thoughts... what do you notice? what feelings arise?"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                    rows={3}
-                    disabled={loading}
-                  />
+                  <div className="relative">
+                    <textarea
+                      value={userInterpretation}
+                      onChange={(e) => setUserInterpretation(e.target.value)}
+                      placeholder="Share your thoughts... what do you notice? what feelings arise?"
+                      className="w-full px-4 py-3 pb-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                      rows={3}
+                      disabled={loading}
+                    />
+                    <div className="absolute right-2 bottom-2 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-sm border border-gray-200">
+                      <span className="text-xs text-gray-400 hidden sm:inline">Voice input</span>
+                      <VoiceInputButton
+                        onTranscript={(text) => setUserInterpretation(userInterpretation ? `${userInterpretation} ${text}` : text)}
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
                   <div className="flex gap-3">
                     <button
                       onClick={submitUserInterpretation}
