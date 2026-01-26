@@ -140,7 +140,9 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 
     // Delay cooldown slightly in case user quickly returns
     warmUpTimeoutRef.current = setTimeout(() => {
-      if (streamRef.current && status !== 'recording') {
+      // Check if recorder is active (user may have started recording after coolDown was called)
+      const isRecording = mediaRecorderRef.current?.state === 'recording'
+      if (streamRef.current && !isRecording) {
         streamRef.current.getTracks().forEach(track => track.stop())
         streamRef.current = null
         setStatus('idle')
