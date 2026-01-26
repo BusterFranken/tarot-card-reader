@@ -34,6 +34,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Log audio file details for debugging
+    console.log('Audio file received:', {
+      name: audioFile.name,
+      type: audioFile.type,
+      size: audioFile.size,
+    })
+
     // Check file size (Whisper has a 25MB limit)
     const MAX_SIZE = 25 * 1024 * 1024 // 25MB
     if (audioFile.size > MAX_SIZE) {
@@ -43,11 +50,31 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check for minimum file size (very small files = likely empty/silent)
+    if (audioFile.size < 1000) {
+      console.log('Audio file too small, likely empty:', audioFile.size)
+      return NextResponse.json(
+        { error: 'Recording too short or empty. Please try again.' },
+        { status: 400 }
+      )
+    }
+
+    // Determine file extension from MIME type
+    const mimeToExt: Record<string, string> = {
+      'audio/webm': 'webm',
+      'audio/webm;codecs=opus': 'webm',
+      'audio/mp4': 'm4a',
+      'audio/mpeg': 'mp3',
+      'audio/wav': 'wav',
+    }
+    const extension = mimeToExt[audioFile.type] || 'webm'
+    const filename = `audio.${extension}`
+
     // Prepare the request to OpenAI Whisper API
     const whisperFormData = new FormData()
-    whisperFormData.append('file', audioFile, 'audio.webm')
+    whisperFormData.append('file', audioFile, filename)
     whisperFormData.append('model', 'whisper-1')
-    whisperFormData.append('language', 'en') // Optional: remove for auto-detection
+    // Remove language parameter to allow auto-detection (supports more accents)
     whisperFormData.append('response_format', 'json')
 
     // Call OpenAI Whisper API

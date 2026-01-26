@@ -114,13 +114,25 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          sampleRate: 16000,
-        } 
-      })
+      // Try to find a real microphone (not virtual)
+      const devices = await navigator.mediaDevices.enumerateDevices()
+      const audioInputs = devices.filter(d => d.kind === 'audioinput')
+      console.log('Available microphones:', audioInputs.map(d => ({ id: d.deviceId, label: d.label })))
+      
+      // Prefer non-virtual devices (filter out Teams, Virtual, etc.)
+      const realMic = audioInputs.find(d => 
+        !d.label.toLowerCase().includes('virtual') && 
+        !d.label.toLowerCase().includes('teams') &&
+        d.deviceId !== 'default'
+      ) || audioInputs.find(d => d.deviceId !== 'default') || audioInputs[0]
+      
+      const constraints: MediaStreamConstraints = realMic?.deviceId 
+        ? { audio: { deviceId: { exact: realMic.deviceId } } }
+        : { audio: true }
+      
+      console.log('Selected microphone:', realMic?.label || 'default')
+      
+      const stream = await navigator.mediaDevices.getUserMedia(constraints)
       
       streamRef.current = stream
       setStatus('ready')
@@ -140,9 +152,9 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 
     // Delay cooldown slightly in case user quickly returns
     warmUpTimeoutRef.current = setTimeout(() => {
-      // Check if recorder is active (user may have started recording after coolDown was called)
-      const isRecording = mediaRecorderRef.current?.state === 'recording'
-      if (streamRef.current && !isRecording) {
+      // Check actual recorder state (status may have changed since setTimeout was set)
+      const isCurrentlyRecording = mediaRecorderRef.current?.state === 'recording'
+      if (streamRef.current && !isCurrentlyRecording) {
         streamRef.current.getTracks().forEach(track => track.stop())
         streamRef.current = null
         setStatus('idle')
@@ -162,27 +174,48 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
     setError(null)
     chunksRef.current = []
 
-    const initRecording = (stream: MediaStream, mimeType: string) => {
-      const mediaRecorder = new MediaRecorder(stream, { mimeType })
+    // Use pre-warmed stream or request new one
+    const initRecording = async (stream: MediaStream) => {
+      // Log audio track details for debugging
+      const audioTrack = stream.getAudioTracks()[0]
+      if (audioTrack) {
+        console.log('Audio track:', audioTrack.label)
+        console.log('Audio track settings:', audioTrack.getSettings())
+        console.log('Audio track enabled:', audioTrack.enabled, 'muted:', audioTrack.muted)
+      }
+
+      // Determine the best supported audio format
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm')
+          ? 'audio/webm'
+          : 'audio/mp4'
+
+      // Use higher bitrate for better quality
+      const mediaRecorder = new MediaRecorder(stream, { 
+        mimeType,
+        audioBitsPerSecond: 128000
+      })
       mediaRecorderRef.current = mediaRecorder
 
       mediaRecorder.ondataavailable = (event) => {
+        console.log('Audio chunk received:', event.data.size, 'bytes')
         if (event.data.size > 0) {
           chunksRef.current.push(event.data)
         }
       }
 
       mediaRecorder.onstop = async () => {
+        console.log('Recording stopped. Chunks:', chunksRef.current.length, 'Total size:', chunksRef.current.reduce((acc, chunk) => acc + chunk.size, 0))
         const audioBlob = new Blob(chunksRef.current, { type: mimeType })
+        console.log('Audio blob created:', audioBlob.size, 'bytes, type:', audioBlob.type)
         cleanup(false) // Full cleanup after recording
         
-        // Only process if we have meaningful audio data (> 1KB to avoid empty/tiny recordings)
-        if (audioBlob.size > 1000) {
+        // Only process if we have actual audio data
+        if (audioBlob.size > 0) {
           await processAudio(audioBlob)
         } else {
-          setError('Recording too short. Please try again.')
-          setStatus('error')
-          setTimeout(() => setStatus('idle'), 2000)
+          setStatus('idle')
         }
       }
 
@@ -199,31 +232,37 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
       setStatus('recording')
     }
 
-    // Determine the best supported audio format
-    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-      ? 'audio/webm;codecs=opus'
-      : MediaRecorder.isTypeSupported('audio/webm')
-        ? 'audio/webm'
-        : 'audio/mp4'
-
-    // Always request a fresh stream for recording to ensure clean audio capture
-    // (warm-up pre-grants permission so this is still fast - no dialog delay)
-    // First, release any existing stream
+    // If we have a pre-warmed stream, use it instantly
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop())
-      streamRef.current = null
+      initRecording(streamRef.current)
+      return
     }
 
-    navigator.mediaDevices.getUserMedia({ 
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: false, // Disabled - was potentially filtering out speech
-        sampleRate: 16000,
-      } 
+    // Otherwise, request microphone access (this is the slow path)
+    // Try to find a real microphone (not virtual)
+    navigator.mediaDevices.enumerateDevices()
+    .then(devices => {
+      const audioInputs = devices.filter(d => d.kind === 'audioinput')
+      console.log('Available microphones:', audioInputs.map(d => ({ id: d.deviceId, label: d.label })))
+      
+      // Prefer non-virtual devices
+      const realMic = audioInputs.find(d => 
+        !d.label.toLowerCase().includes('virtual') && 
+        !d.label.toLowerCase().includes('teams') &&
+        d.deviceId !== 'default'
+      ) || audioInputs.find(d => d.deviceId !== 'default') || audioInputs[0]
+      
+      const constraints: MediaStreamConstraints = realMic?.deviceId 
+        ? { audio: { deviceId: { exact: realMic.deviceId } } }
+        : { audio: true }
+      
+      console.log('Selected microphone:', realMic?.label || 'default')
+      
+      return navigator.mediaDevices.getUserMedia(constraints)
     })
     .then(stream => {
       streamRef.current = stream
-      initRecording(stream, mimeType)
+      initRecording(stream)
     })
     .catch(err => {
       let errorMessage = 'Failed to access microphone'

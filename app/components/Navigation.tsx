@@ -1,15 +1,43 @@
 'use client'
 
+import { clearPersistedState } from '../hooks/usePersistedState'
+
 export default function Navigation() {
   const whatsappMessage = encodeURIComponent("Hi! I'd like to connect about Buster's Tarot Card Reader app.")
   const whatsappLink = `https://wa.me/31624877967?text=${whatsappMessage}`
+
+  const handleNewReading = () => {
+    if (window.confirm('Start a new reading? This will clear your current session.')) {
+      clearPersistedState()
+      window.location.href = '/tarot'
+    }
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-purple-900/90 backdrop-blur-md shadow-lg border-b border-purple-700">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2 sm:py-4">
-          <div className="hidden sm:block flex-1"></div>
-          <h1 className="text-base sm:text-2xl font-light text-white tracking-wide flex-1 sm:flex-1 text-center leading-tight whitespace-nowrap">
+          <div className="flex-shrink-0 sm:flex-1 flex justify-start">
+            <button
+              onClick={handleNewReading}
+              className="flex items-center gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-xs sm:text-sm font-medium"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-4 w-4 sm:h-5 sm:w-5" 
+                viewBox="0 0 24 24" 
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span className="hidden sm:inline">New Reading</span>
+            </button>
+          </div>
+          <h1 className="text-base sm:text-2xl font-light text-white tracking-wide flex-1 text-center leading-tight whitespace-nowrap">
             ✨ Buster's Tarot Card Reader ✨
           </h1>
           <div className="flex-shrink-0 sm:flex-1 flex justify-end">
