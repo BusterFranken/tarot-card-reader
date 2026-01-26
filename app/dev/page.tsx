@@ -718,18 +718,25 @@ export default function TarotPage() {
                 <div 
                   className="relative overflow-hidden"
                   onTouchStart={(e) => {
-                    setTouchStart(e.targetTouches[0].clientX)
+                    const startX = e.targetTouches[0].clientX
+                    setTouchStart(startX)
+                    setTouchEnd(startX)
                   }}
                   onTouchMove={(e) => {
                     setTouchEnd(e.targetTouches[0].clientX)
                   }}
                   onTouchEnd={() => {
-                    if (touchStart - touchEnd > 75 && mobileCarouselIndex < 2) {
-                      setMobileCarouselIndex(mobileCarouselIndex + 1)
+                    const delta = touchStart - touchEnd
+                    if (Math.abs(delta) > 75) {
+                      if (delta > 0 && mobileCarouselIndex < 2) {
+                        setMobileCarouselIndex(mobileCarouselIndex + 1)
+                      }
+                      if (delta < 0 && mobileCarouselIndex > 0) {
+                        setMobileCarouselIndex(mobileCarouselIndex - 1)
+                      }
                     }
-                    if (touchStart - touchEnd < -75 && mobileCarouselIndex > 0) {
-                      setMobileCarouselIndex(mobileCarouselIndex - 1)
-                    }
+                    setTouchStart(0)
+                    setTouchEnd(0)
                   }}
                 >
                   <div 
