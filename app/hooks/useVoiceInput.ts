@@ -162,15 +162,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
     setError(null)
     chunksRef.current = []
 
-    // Use pre-warmed stream or request new one
-    const initRecording = async (stream: MediaStream) => {
-      // Determine the best supported audio format
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-        ? 'audio/webm;codecs=opus'
-        : MediaRecorder.isTypeSupported('audio/webm')
-          ? 'audio/webm'
-          : 'audio/mp4'
-
+    const initRecording = (stream: MediaStream, mimeType: string) => {
       const mediaRecorder = new MediaRecorder(stream, { mimeType })
       mediaRecorderRef.current = mediaRecorder
 
@@ -184,11 +176,13 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
         const audioBlob = new Blob(chunksRef.current, { type: mimeType })
         cleanup(false) // Full cleanup after recording
         
-        // Only process if we have actual audio data
-        if (audioBlob.size > 0) {
+        // Only process if we have meaningful audio data (> 1KB to avoid empty/tiny recordings)
+        if (audioBlob.size > 1000) {
           await processAudio(audioBlob)
         } else {
-          setStatus('idle')
+          setError('Recording too short. Please try again.')
+          setStatus('error')
+          setTimeout(() => setStatus('idle'), 2000)
         }
       }
 
@@ -205,23 +199,31 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
       setStatus('recording')
     }
 
-    // If we have a pre-warmed stream, use it instantly
+    // Determine the best supported audio format
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+      ? 'audio/webm;codecs=opus'
+      : MediaRecorder.isTypeSupported('audio/webm')
+        ? 'audio/webm'
+        : 'audio/mp4'
+
+    // Always request a fresh stream for recording to ensure clean audio capture
+    // (warm-up pre-grants permission so this is still fast - no dialog delay)
+    // First, release any existing stream
     if (streamRef.current) {
-      initRecording(streamRef.current)
-      return
+      streamRef.current.getTracks().forEach(track => track.stop())
+      streamRef.current = null
     }
 
-    // Otherwise, request microphone access (this is the slow path)
     navigator.mediaDevices.getUserMedia({ 
       audio: {
         echoCancellation: true,
-        noiseSuppression: true,
+        noiseSuppression: false, // Disabled - was potentially filtering out speech
         sampleRate: 16000,
       } 
     })
     .then(stream => {
       streamRef.current = stream
-      initRecording(stream)
+      initRecording(stream, mimeType)
     })
     .catch(err => {
       let errorMessage = 'Failed to access microphone'
