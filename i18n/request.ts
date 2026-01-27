@@ -1,5 +1,5 @@
 import { getRequestConfig } from 'next-intl/server'
-import { cookies, headers } from 'next/headers'
+import { cookies } from 'next/headers'
 import { locales, defaultLocale, Locale } from './config'
 
 export default getRequestConfig(async () => {
@@ -14,23 +14,10 @@ export default getRequestConfig(async () => {
     }
   }
 
-  // Fall back to browser's Accept-Language header
-  const headersList = headers()
-  const acceptLanguage = headersList.get('accept-language') || ''
-  
-  // Parse Accept-Language header to find best match
-  const browserLocales = acceptLanguage
-    .split(',')
-    .map(lang => lang.split(';')[0].trim().substring(0, 2).toLowerCase())
-  
-  const detectedLocale = browserLocales.find(lang => 
-    locales.includes(lang as Locale)
-  ) as Locale | undefined
-
-  const locale = detectedLocale || defaultLocale
-
+  // Default to English - client-side LanguageDetector will handle
+  // detecting browser UI language and setting the cookie on first visit
   return {
-    locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    locale: defaultLocale,
+    messages: (await import(`../messages/${defaultLocale}.json`)).default,
   }
 })
