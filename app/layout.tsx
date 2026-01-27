@@ -7,7 +7,7 @@ import LanguageDetector from './components/LanguageDetector'
 
 export const metadata: Metadata = {
   title: "Buster's Tarot Card Reader",
-  description: 'Get inspired with random motivational quotes and receive authentic tarot card readings',
+  description: 'Receive authentic tarot card readings with AI-powered interpretations',
 }
 
 export default async function RootLayout({

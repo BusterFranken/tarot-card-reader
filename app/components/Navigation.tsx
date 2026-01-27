@@ -15,7 +15,7 @@ export default function Navigation() {
   const handleNewReading = () => {
     if (window.confirm(t('confirmNewReading'))) {
       clearPersistedState()
-      window.location.href = '/tarot'
+      window.location.href = '/'
     }
   }
 
