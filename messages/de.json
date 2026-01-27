@@ -1,0 +1,92 @@
+{
+  "navigation": {
+    "title": "Buster's Tarotkarten-Leser",
+    "newReading": "Neue Lesung",
+    "contactCreator": "Kontakt Ersteller",
+    "confirmNewReading": "Eine neue Lesung starten? Dies löscht deine aktuelle Sitzung."
+  },
+  "tarot": {
+    "title": "Tarotkarten-Lesung",
+    "subtitle": "Drei-Karten-Spread: Vergangenheit • Gegenwart • Zukunft",
+    "questionLabel": "Zu welcher Frage suchst du Führung?",
+    "questionHint": "Mehr Kontext ermöglicht eine genauere Lesung. Alles, was du schreibst, ist vollständig privat.",
+    "questionPlaceholder": "Was muss ich über meinen Karriereweg wissen? Was besorgt mich? Was hoffe ich zu verstehen?",
+    "voiceInput": "Spracheingabe",
+    "wordCountLow": "Mehr Kontext zum Wahrsagen nötig...",
+    "wordCountMedium": "Gut... Weiter graben!",
+    "wordCountHigh": "Ausgezeichnet!",
+    "word": "Wort",
+    "words": "Wörter",
+    "focusHint": "Nimm dir einen Moment, um dich zu zentrieren und auf deine Frage zu konzentrieren. Die Karten werden auf deine Energie reagieren.",
+    "beginReading": "Lesung Beginnen",
+    "shuffling": "Das Deck wird gemischt...",
+    "shufflingHint": "Konzentriere dich auf deine Frage, während die Karten sich auf deine Energie ausrichten",
+    "clickToRevealPast": "Klicke, um die Vergangenheits-Karte umzudrehen",
+    "clickToRevealPresent": "Klicke, um die Gegenwarts-Karte umzudrehen",
+    "clickToRevealFuture": "Klicke, um die Zukunfts-Karte umzudrehen",
+    "reversed": "UMGEKEHRT",
+    "upright": "AUFRECHT",
+    "past": "Vergangenheit",
+    "present": "Gegenwart",
+    "future": "Zukunft",
+    "cardBack": "Kartenrückseite",
+    "clickToReveal": "Klicken zum Enthüllen",
+    "tapToReveal": "Tippen zum Enthüllen",
+    "swipeHint": "← Wischen, um alle Karten zu sehen →",
+    "scrollDown": "Nach unten scrollen",
+    "whatDoYouSee": "Was siehst du in der {position}-Karte?",
+    "interpretationPrompt": "Bevor ich die traditionelle Interpretation teile, was fällt dir ein, wenn du diese Karte betrachtest? Was fällt dir in Bezug auf deine Frage auf?",
+    "interpretationPlaceholder": "Teile deine Gedanken... was bemerkst du? Welche Gefühle entstehen?",
+    "shareAndGetReading": "Teilen & Lesung Erhalten",
+    "gettingReading": "Lesung wird geladen...",
+    "skip": "Überspringen",
+    "divining": "Wahrsagen...",
+    "diviningHint": "Die Fäden von Vergangenheit, Gegenwart und Zukunft werden zu deiner Geschichte verwoben",
+    "yourCompleteReading": "Deine Vollständige Lesung",
+    "theCard": "Die {position}-Karte",
+    "continueToCard": "Weiter zur {position}-Karte",
+    "getCombinedReading": "Kombinierte Lesung Erhalten",
+    "weavingStory": "Die Geschichte wird gewoben...",
+    "downloadPDF": "Lesung als PDF herunterladen",
+    "newReading": "Neue Lesung",
+    "previousStep": "Vorheriger Schritt",
+    "nextStep": "Nächster Schritt",
+    "viewCard": "{position}-Karte ansehen"
+  },
+  "errors": {
+    "enterQuestion": "Bitte gib deine Frage oder deinen Fokus ein",
+    "shareOrSkip": "Bitte teile deine Interpretation oder klicke auf \"Überspringen\", um die Lesung direkt zu erhalten",
+    "connectionError": "Verbindung zum Lesungsdienst nicht möglich. Bitte überprüfe deinen API-Schlüssel und versuche es erneut.",
+    "connectionErrorShort": "Verbindung zum Lesungsdienst nicht möglich.",
+    "failedReading": "Lesung konnte nicht abgerufen werden",
+    "failedCombinedReading": "Kombinierte Lesung konnte nicht abgerufen werden"
+  },
+  "pdf": {
+    "title": "Tarotkarten-Lesung",
+    "yourQuestion": "Deine Frage:",
+    "cardsDrawn": "Gezogene Karten:",
+    "interpretation": "{position}-Karten-Interpretation:",
+    "combinedReading": "Kombinierte Lesung:",
+    "readingNotAvailable": "Lesung nicht verfügbar",
+    "reversed": "Umgekehrt",
+    "upright": "Aufrecht",
+    "footer1": "Tarotkarten-Lesung erstellt mit <3 von Buster Franken",
+    "footer2": "Schreib mir auf WhatsApp unter +31624877967 für weitere Wahrsagungen,",
+    "footer3": "Vorschläge zur App oder andere Fragen"
+  },
+  "voice": {
+    "disabled": "Spracheingabe deaktiviert",
+    "stopRecording": "Klicken, um Aufnahme zu stoppen",
+    "transcribing": "Transkribieren...",
+    "errorRetry": "Fehler aufgetreten, klicken zum Erneut versuchen",
+    "ready": "Bereit! Klicken zum Aufnehmen",
+    "startRecording": "Klicken, um Spracheingabe zu starten"
+  },
+  "home": {
+    "loading": "Tarot-Lesung wird geladen..."
+  },
+  "metadata": {
+    "title": "Buster's Tarotkarten-Leser",
+    "description": "Lass dich von zufälligen motivierenden Zitaten inspirieren und erhalte authentische Tarotkarten-Lesungen"
+  }
+}

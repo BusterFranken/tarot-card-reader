@@ -1,0 +1,92 @@
+{
+  "navigation": {
+    "title": "Lecteur de Tarot de Buster",
+    "newReading": "Nouvelle Lecture",
+    "contactCreator": "Contacter le Créateur",
+    "confirmNewReading": "Commencer une nouvelle lecture ? Cela effacera votre session actuelle."
+  },
+  "tarot": {
+    "title": "Lecture de Cartes de Tarot",
+    "subtitle": "Tirage à Trois Cartes : Passé • Présent • Futur",
+    "questionLabel": "Sur quelle question cherchez-vous des conseils ?",
+    "questionHint": "Plus de contexte permet une lecture plus précise. Tout ce que vous écrivez est entièrement privé.",
+    "questionPlaceholder": "Que dois-je savoir sur mon parcours professionnel ? Qu'est-ce qui me préoccupe ? Qu'est-ce que j'espère comprendre ?",
+    "voiceInput": "Entrée vocale",
+    "wordCountLow": "Plus de contexte nécessaire pour diviner...",
+    "wordCountMedium": "Bien... Continuez à approfondir !",
+    "wordCountHigh": "Excellent !",
+    "word": "mot",
+    "words": "mots",
+    "focusHint": "Prenez un moment pour vous centrer et vous concentrer sur votre question. Les cartes répondront à votre énergie.",
+    "beginReading": "Commencer la Lecture",
+    "shuffling": "Mélange du jeu...",
+    "shufflingHint": "Concentrez-vous sur votre question pendant que les cartes s'alignent avec votre énergie",
+    "clickToRevealPast": "Cliquez pour retourner la carte du Passé",
+    "clickToRevealPresent": "Cliquez pour retourner la carte du Présent",
+    "clickToRevealFuture": "Cliquez pour retourner la carte du Futur",
+    "reversed": "INVERSÉE",
+    "upright": "DROITE",
+    "past": "Passé",
+    "present": "Présent",
+    "future": "Futur",
+    "cardBack": "Dos de Carte",
+    "clickToReveal": "Cliquez pour révéler",
+    "tapToReveal": "Touchez pour révéler",
+    "swipeHint": "← Glissez pour voir toutes les cartes →",
+    "scrollDown": "Faites défiler vers le bas",
+    "whatDoYouSee": "Que voyez-vous dans la carte du {position} ?",
+    "interpretationPrompt": "Avant de partager l'interprétation traditionnelle, qu'est-ce qui vous vient à l'esprit en regardant cette carte ? Qu'est-ce qui attire votre attention par rapport à votre question ?",
+    "interpretationPlaceholder": "Partagez vos pensées... que remarquez-vous ? quels sentiments émergent ?",
+    "shareAndGetReading": "Partager et Obtenir la Lecture",
+    "gettingReading": "Obtention de la lecture...",
+    "skip": "Passer",
+    "divining": "Divination...",
+    "diviningHint": "Tissant les fils du passé, du présent et du futur dans votre histoire",
+    "yourCompleteReading": "Votre Lecture Complète",
+    "theCard": "La Carte du {position}",
+    "continueToCard": "Continuer vers la Carte du {position}",
+    "getCombinedReading": "Obtenir la Lecture Combinée",
+    "weavingStory": "Tissage de l'histoire...",
+    "downloadPDF": "Télécharger la Lecture en PDF",
+    "newReading": "Nouvelle Lecture",
+    "previousStep": "Étape Précédente",
+    "nextStep": "Étape Suivante",
+    "viewCard": "Voir la carte du {position}"
+  },
+  "errors": {
+    "enterQuestion": "Veuillez entrer votre question ou votre focus",
+    "shareOrSkip": "Veuillez partager votre interprétation ou cliquez sur \"Passer\" pour obtenir la lecture directement",
+    "connectionError": "Impossible de se connecter au service de lecture. Veuillez vérifier votre clé API et réessayer.",
+    "connectionErrorShort": "Impossible de se connecter au service de lecture.",
+    "failedReading": "Échec de l'obtention de la lecture",
+    "failedCombinedReading": "Échec de l'obtention de la lecture combinée"
+  },
+  "pdf": {
+    "title": "Lecture de Cartes de Tarot",
+    "yourQuestion": "Votre Question :",
+    "cardsDrawn": "Cartes Tirées :",
+    "interpretation": "Interprétation de la Carte du {position} :",
+    "combinedReading": "Lecture Combinée :",
+    "readingNotAvailable": "Lecture non disponible",
+    "reversed": "Inversée",
+    "upright": "Droite",
+    "footer1": "Lecture de Cartes de Tarot faite avec <3 par Buster Franken",
+    "footer2": "Envoyez-moi un message sur WhatsApp au +31624877967 pour plus de divinations,",
+    "footer3": "suggestions sur l'application ou autres questions"
+  },
+  "voice": {
+    "disabled": "Entrée vocale désactivée",
+    "stopRecording": "Cliquez pour arrêter l'enregistrement",
+    "transcribing": "Transcription...",
+    "errorRetry": "Erreur survenue, cliquez pour réessayer",
+    "ready": "Prêt ! Cliquez pour enregistrer",
+    "startRecording": "Cliquez pour démarrer l'entrée vocale"
+  },
+  "home": {
+    "loading": "Chargement de la lecture de tarot..."
+  },
+  "metadata": {
+    "title": "Lecteur de Tarot de Buster",
+    "description": "Inspirez-vous avec des citations motivantes aléatoires et recevez des lectures authentiques de cartes de tarot"
+  }
+}

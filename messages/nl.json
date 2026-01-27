@@ -1,0 +1,92 @@
+{
+  "navigation": {
+    "title": "Buster's Tarotkaartlezer",
+    "newReading": "Nieuwe Lezing",
+    "contactCreator": "Contact Maker",
+    "confirmNewReading": "Een nieuwe lezing starten? Dit wist je huidige sessie."
+  },
+  "tarot": {
+    "title": "Tarotkaart Lezing",
+    "subtitle": "Drie Kaarten Spread: Verleden • Heden • Toekomst",
+    "questionLabel": "Welke vraag zoek je begeleiding voor?",
+    "questionHint": "Meer context zorgt voor een accuratere lezing. Alles wat je schrijft is volledig privé.",
+    "questionPlaceholder": "Wat moet ik weten over mijn carrièrepad? Wat baart me zorgen? Wat hoop ik te begrijpen?",
+    "voiceInput": "Spraakinvoer",
+    "wordCountLow": "Meer context nodig om te voorspellen...",
+    "wordCountMedium": "Goed... Blijf graven!",
+    "wordCountHigh": "Uitstekend!",
+    "word": "woord",
+    "words": "woorden",
+    "focusHint": "Neem even de tijd om jezelf te centreren en focus op je vraag. De kaarten zullen reageren op je energie.",
+    "beginReading": "Begin Lezing",
+    "shuffling": "Het deck schudden...",
+    "shufflingHint": "Focus op je vraag terwijl de kaarten afstemmen op je energie",
+    "clickToRevealPast": "Klik om de Verleden kaart om te draaien",
+    "clickToRevealPresent": "Klik om de Heden kaart om te draaien",
+    "clickToRevealFuture": "Klik om de Toekomst kaart om te draaien",
+    "reversed": "OMGEKEERD",
+    "upright": "RECHTOP",
+    "past": "Verleden",
+    "present": "Heden",
+    "future": "Toekomst",
+    "cardBack": "Kaart Achterkant",
+    "clickToReveal": "Klik om te onthullen",
+    "tapToReveal": "Tik om te onthullen",
+    "swipeHint": "← Veeg om alle kaarten te zien →",
+    "scrollDown": "Scroll naar beneden",
+    "whatDoYouSee": "Wat zie je in de {position} kaart?",
+    "interpretationPrompt": "Voordat ik de traditionele interpretatie deel, wat komt er in je op als je naar deze kaart kijkt? Wat trekt je aandacht in relatie tot je vraag?",
+    "interpretationPlaceholder": "Deel je gedachten... wat valt je op? welke gevoelens komen op?",
+    "shareAndGetReading": "Deel & Krijg Lezing",
+    "gettingReading": "Lezing ophalen...",
+    "skip": "Overslaan",
+    "divining": "Voorspellen...",
+    "diviningHint": "De draden van verleden, heden en toekomst worden tot jouw verhaal geweven",
+    "yourCompleteReading": "Je Volledige Lezing",
+    "theCard": "De {position} Kaart",
+    "continueToCard": "Ga door naar {position} Kaart",
+    "getCombinedReading": "Krijg Gecombineerde Lezing",
+    "weavingStory": "Het verhaal weven...",
+    "downloadPDF": "Download Lezing als PDF",
+    "newReading": "Nieuwe Lezing",
+    "previousStep": "Vorige Stap",
+    "nextStep": "Volgende Stap",
+    "viewCard": "Bekijk {position} kaart"
+  },
+  "errors": {
+    "enterQuestion": "Voer alsjeblieft je vraag of focus in",
+    "shareOrSkip": "Deel alsjeblieft je interpretatie of klik op \"Overslaan\" om de lezing direct te krijgen",
+    "connectionError": "Kan geen verbinding maken met de lezingservice. Controleer je API-sleutel en probeer het opnieuw.",
+    "connectionErrorShort": "Kan geen verbinding maken met de lezingservice.",
+    "failedReading": "Lezing ophalen mislukt",
+    "failedCombinedReading": "Gecombineerde lezing ophalen mislukt"
+  },
+  "pdf": {
+    "title": "Tarotkaart Lezing",
+    "yourQuestion": "Je Vraag:",
+    "cardsDrawn": "Getrokken Kaarten:",
+    "interpretation": "{position} Kaart Interpretatie:",
+    "combinedReading": "Gecombineerde Lezing:",
+    "readingNotAvailable": "Lezing niet beschikbaar",
+    "reversed": "Omgekeerd",
+    "upright": "Rechtop",
+    "footer1": "Tarotkaart Lezing gemaakt met <3 door Buster Franken",
+    "footer2": "Stuur me een bericht op WhatsApp via +31624877967 voor meer voorspellingen,",
+    "footer3": "suggesties over de app of andere vragen"
+  },
+  "voice": {
+    "disabled": "Spraakinvoer uitgeschakeld",
+    "stopRecording": "Klik om opname te stoppen",
+    "transcribing": "Transcriberen...",
+    "errorRetry": "Fout opgetreden, klik om opnieuw te proberen",
+    "ready": "Klaar! Klik om op te nemen",
+    "startRecording": "Klik om spraakinvoer te starten"
+  },
+  "home": {
+    "loading": "Tarotlezing laden..."
+  },
+  "metadata": {
+    "title": "Buster's Tarotkaartlezer",
+    "description": "Laat je inspireren met willekeurige motiverende citaten en ontvang authentieke tarotkaartvlezingen"
+  }
+}

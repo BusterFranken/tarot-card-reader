@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useTranslations, useLocale } from 'next-intl'
 import { allCards, TarotCard } from '../data/tarotCards'
 import jsPDF from 'jspdf'
 import { usePersistedState, clearPersistedState } from '../hooks/usePersistedState'
 import VoiceInputButton from '../components/VoiceInputButton'
+import { Locale } from '../../i18n/config'
 
 interface SelectedCard {
   card: TarotCard
@@ -17,6 +19,11 @@ interface SelectedCard {
 type ReadingStep = 'question' | 'shuffling' | 'ready' | 'past-prompt' | 'past-reading' | 'present-prompt' | 'present-reading' | 'future-prompt' | 'future-reading' | 'combined-reading'
 
 export default function TarotPage() {
+  const t = useTranslations('tarot')
+  const tErrors = useTranslations('errors')
+  const tPdf = useTranslations('pdf')
+  const locale = useLocale() as Locale
+
   // Persisted state - survives page reloads
   const [step, setStep] = usePersistedState<ReadingStep>('step', 'question')
   const [question, setQuestion] = usePersistedState('question', '')
@@ -53,9 +60,9 @@ export default function TarotPage() {
   }
 
   const getWordCountStatus = () => {
-    if (wordCount === 0 || wordCount < 13) return 'More context needed to divine...'
-    if (wordCount < 40) return 'Good... Keep digging!'
-    return 'Excellent!'
+    if (wordCount === 0 || wordCount < 13) return t('wordCountLow')
+    if (wordCount < 40) return t('wordCountMedium')
+    return t('wordCountHigh')
   }
 
   const getWordCountWidth = () => {
@@ -159,7 +166,7 @@ export default function TarotPage() {
 
   const startReading = () => {
     if (!question.trim()) {
-      alert('Please enter your question or focus')
+      alert(tErrors('enterQuestion'))
       return
     }
     setStep('shuffling')
@@ -235,7 +242,7 @@ export default function TarotPage() {
 
   const submitUserInterpretation = async () => {
     if (!userInterpretation.trim()) {
-      alert('Please share your interpretation or click "Skip" to get the reading directly')
+      alert(tErrors('shareOrSkip'))
       return
     }
     
@@ -265,6 +272,7 @@ export default function TarotPage() {
           conversationHistory,
           position: currentCard.position,
           isReversed: currentCard.isReversed,
+          locale,
         })
       })
       
@@ -289,8 +297,8 @@ export default function TarotPage() {
         }
       } else {
         const error = await response.json()
-        const errorMsg = error.error || 'Failed to get reading'
-        setAiInterpretation(`⚠️ Error: ${errorMsg}`)
+        const errorMsg = error.error || tErrors('failedReading')
+        setAiInterpretation(`⚠️ ${errorMsg}`)
         
         // Still move to reading step so user can see the error
         if (currentCardIndex === 0) {
@@ -306,7 +314,7 @@ export default function TarotPage() {
       }
     } catch (error) {
       console.error('Error:', error)
-      setAiInterpretation('⚠️ Unable to connect to the reading service. Please check your API key and try again.')
+      setAiInterpretation(`⚠️ ${tErrors('connectionError')}`)
       
       // Move to reading step so user can see the error
       if (currentCardIndex === 0) {
@@ -349,6 +357,7 @@ export default function TarotPage() {
           question,
           conversationHistory,
           allCards: selectedCards,
+          locale,
         })
       })
       
@@ -357,11 +366,11 @@ export default function TarotPage() {
         setAiInterpretation(data.interpretation)
       } else {
         const error = await response.json()
-        setAiInterpretation(`⚠️ Error: ${error.error || 'Failed to get combined reading'}`)
+        setAiInterpretation(`⚠️ ${error.error || tErrors('failedCombinedReading')}`)
       }
     } catch (error) {
       console.error('Error:', error)
-      setAiInterpretation('⚠️ Unable to connect to the reading service.')
+      setAiInterpretation(`⚠️ ${tErrors('connectionErrorShort')}`)
     } finally {
       setLoading(false)
       setIsDivining(false)
@@ -568,10 +577,20 @@ export default function TarotPage() {
   }
 
   const getGuideText = () => {
-    if (step === 'ready' && currentCardIndex === 0) return 'Click to turn over the Past card'
-    if (step === 'ready' && currentCardIndex === 1) return 'Click to turn over the Present card'
-    if (step === 'ready' && currentCardIndex === 2) return 'Click to turn over the Future card'
+    if (step === 'ready' && currentCardIndex === 0) return t('clickToRevealPast')
+    if (step === 'ready' && currentCardIndex === 1) return t('clickToRevealPresent')
+    if (step === 'ready' && currentCardIndex === 2) return t('clickToRevealFuture')
     return ''
+  }
+
+  // Helper to get translated position name
+  const getPositionName = (position: string) => {
+    const positionMap: Record<string, string> = {
+      'Past': t('past'),
+      'Present': t('present'),
+      'Future': t('future'),
+    }
+    return positionMap[position] || position
   }
 
   return (
@@ -585,31 +604,31 @@ export default function TarotPage() {
       <div className="max-w-6xl w-full relative z-10">
         <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-12">
           <h1 className="text-2xl md:text-4xl font-light text-center text-gray-800 mb-2">
-            Tarot Card Reading
+            {t('title')}
           </h1>
           <p className="text-center text-gray-600 mb-8 text-sm">
-            Three Card Spread: Past • Present • Future
+            {t('subtitle')}
           </p>
 
           {step === 'question' && (
             <div className="space-y-6">
               <div>
                 <label className="block text-gray-700 font-medium mb-2 text-lg">
-                  What question do you seek guidance on?
+                  {t('questionLabel')}
                 </label>
                 <p className="mb-3 text-sm text-gray-400">
-                  More context gives for a more accurate reading. Everything you write is completely private.
+                  {t('questionHint')}
                 </p>
                 <div className="relative">
                   <textarea
                     value={question}
                     onChange={(e) => handleQuestionChange(e.target.value)}
-                    placeholder="What do I need to know about my career path? What concerns me? What am I hoping to understand?"
+                    placeholder={t('questionPlaceholder')}
                     className="w-full px-4 py-3 pb-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                     rows={5}
                   />
                   <div className="absolute right-2 bottom-2 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-sm border border-gray-200">
-                    <span className="text-xs text-gray-400 hidden sm:inline">Voice input</span>
+                    <span className="text-xs text-gray-400 hidden sm:inline">{t('voiceInput')}</span>
                     <VoiceInputButton
                       onTranscript={(text) => handleQuestionChange(question ? `${question} ${text}` : text)}
                     />
@@ -633,20 +652,20 @@ export default function TarotPage() {
                       {getWordCountStatus()}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {wordCount} {wordCount === 1 ? 'word' : 'words'}
+                      {wordCount} {wordCount === 1 ? t('word') : t('words')}
                     </p>
                   </div>
                 </div>
 
                 <p className="text-sm text-gray-500 mt-3">
-                  Take a moment to center yourself and focus on your question. The cards will respond to your energy.
+                  {t('focusHint')}
                 </p>
               </div>
               <button
                 onClick={startReading}
                 className="w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 font-medium text-lg shadow-lg hover:shadow-xl"
               >
-                Begin Reading
+                {t('beginReading')}
               </button>
             </div>
           )}
@@ -656,8 +675,8 @@ export default function TarotPage() {
               <div className="mb-6">
                 <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600"></div>
               </div>
-              <p className="text-xl text-gray-700 mb-4">Shuffling the deck...</p>
-              <p className="text-gray-600 mb-6">Focus on your question as the cards align with your energy</p>
+              <p className="text-xl text-gray-700 mb-4">{t('shuffling')}</p>
+              <p className="text-gray-600 mb-6">{t('shufflingHint')}</p>
               <div className="w-full bg-gray-200 rounded-full h-2 max-w-md mx-auto">
                 <div
                   className="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full transition-all duration-100"
@@ -709,10 +728,10 @@ export default function TarotPage() {
                                 ? 'bg-red-100 text-red-800'
                                 : 'bg-blue-100 text-blue-800'
                             }`}>
-                              {selectedCard.isReversed ? 'REVERSED' : 'UPRIGHT'}
+                              {selectedCard.isReversed ? t('reversed') : t('upright')}
                             </div>
                             <h3 className="text-lg font-bold text-gray-800 mb-1">{selectedCard.card.name}</h3>
-                            <p className="text-xs font-medium text-gray-600">{selectedCard.position}</p>
+                            <p className="text-xs font-medium text-gray-600">{getPositionName(selectedCard.position)}</p>
                           </div>
                           
                           <div className="relative w-full aspect-[2/3] mb-4">
@@ -731,16 +750,16 @@ export default function TarotPage() {
                           <div className="relative w-full aspect-[2/3] mb-4">
                             <Image
                               src="/cards/CardBacks.png"
-                              alt="Card Back"
+                              alt={t('cardBack')}
                               fill
                               className="object-contain"
                               sizes="(max-width: 768px) 100vw, 33vw"
                               unoptimized
                             />
                           </div>
-                          <p className="text-sm text-gray-500 font-medium">{selectedCard.position}</p>
+                          <p className="text-sm text-gray-500 font-medium">{getPositionName(selectedCard.position)}</p>
                           {step === 'ready' && index === currentCardIndex && (
-                            <p className="text-xs text-purple-600 mt-2">Click to reveal</p>
+                            <p className="text-xs text-purple-600 mt-2">{t('clickToReveal')}</p>
                           )}
                         </div>
                       )}
@@ -806,10 +825,10 @@ export default function TarotPage() {
                                     ? 'bg-red-100 text-red-800'
                                     : 'bg-blue-100 text-blue-800'
                                 }`}>
-                                  {selectedCard.isReversed ? 'REVERSED' : 'UPRIGHT'}
+                                  {selectedCard.isReversed ? t('reversed') : t('upright')}
                                 </div>
                                 <h3 className="text-lg font-bold text-gray-800 mb-1">{selectedCard.card.name}</h3>
-                                <p className="text-xs font-medium text-gray-600">{selectedCard.position}</p>
+                                <p className="text-xs font-medium text-gray-600">{getPositionName(selectedCard.position)}</p>
                               </div>
                               
                               <div className="relative w-full aspect-[2/3] mb-4">
@@ -828,16 +847,16 @@ export default function TarotPage() {
                               <div className="relative w-full aspect-[2/3] mb-4">
                                 <Image
                                   src="/cards/CardBacks.png"
-                                  alt="Card Back"
+                                  alt={t('cardBack')}
                                   fill
                                   className="object-contain"
                                   sizes="100vw"
                                   unoptimized
                                 />
                               </div>
-                              <p className="text-sm text-gray-500 font-medium">{selectedCard.position}</p>
+                              <p className="text-sm text-gray-500 font-medium">{getPositionName(selectedCard.position)}</p>
                               {step === 'ready' && index === currentCardIndex && (
-                                <p className="text-xs text-purple-600 mt-2">Tap to reveal</p>
+                                <p className="text-xs text-purple-600 mt-2">{t('tapToReveal')}</p>
                               )}
                             </div>
                           )}
@@ -858,16 +877,16 @@ export default function TarotPage() {
                           ? 'w-8 h-3 bg-purple-600 rounded-full'
                           : 'w-3 h-3 bg-purple-300 rounded-full'
                       }`}
-                      aria-label={`View ${card.position} card`}
+                      aria-label={t('viewCard', { position: getPositionName(card.position) })}
                     >
-                      <span className="sr-only">{card.position}</span>
+                      <span className="sr-only">{getPositionName(card.position)}</span>
                     </button>
                   ))}
                 </div>
                 
                 {/* Swipe hint */}
                 <p className="text-center text-sm text-gray-500 mt-2 animate-pulse">
-                  ← Swipe to view all cards →
+                  {t('swipeHint')}
                 </p>
               </div>
 
@@ -875,7 +894,7 @@ export default function TarotPage() {
               {(step.includes('prompt') || step.includes('reading')) && (
                 <div className="md:hidden flex justify-center mt-4">
                   <div className="flex flex-col items-center animate-bounce">
-                    <p className="text-sm text-purple-600 font-medium mb-1">Scroll down</p>
+                    <p className="text-sm text-purple-600 font-medium mb-1">{t('scrollDown')}</p>
                     <svg 
                       className="w-6 h-6 text-purple-600" 
                       fill="none" 
@@ -892,23 +911,22 @@ export default function TarotPage() {
               {step.includes('prompt') && (
                 <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-6 space-y-4">
                   <h3 className="text-xl font-semibold text-gray-800">
-                    What do you see in the {selectedCards[currentCardIndex].position} card?
+                    {t('whatDoYouSee', { position: getPositionName(selectedCards[currentCardIndex].position) })}
                   </h3>
                   <p className="text-gray-700">
-                    Before I share the traditional interpretation, what springs to mind when you look at this card? 
-                    What catches your attention in relation to your question?
+                    {t('interpretationPrompt')}
                   </p>
                   <div className="relative">
                     <textarea
                       value={userInterpretation}
                       onChange={(e) => setUserInterpretation(e.target.value)}
-                      placeholder="Share your thoughts... what do you notice? what feelings arise?"
+                      placeholder={t('interpretationPlaceholder')}
                       className="w-full px-4 py-3 pb-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                       rows={3}
                       disabled={loading}
                     />
                     <div className="absolute right-2 bottom-2 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-sm border border-gray-200">
-                      <span className="text-xs text-gray-400 hidden sm:inline">Voice input</span>
+                      <span className="text-xs text-gray-400 hidden sm:inline">{t('voiceInput')}</span>
                       <VoiceInputButton
                         onTranscript={(text) => setUserInterpretation(userInterpretation ? `${userInterpretation} ${text}` : text)}
                         disabled={loading}
@@ -921,14 +939,14 @@ export default function TarotPage() {
                       disabled={loading}
                       className="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium disabled:opacity-50"
                     >
-                      {loading ? 'Getting reading...' : 'Share & Get Reading'}
+                      {loading ? t('gettingReading') : t('shareAndGetReading')}
                     </button>
                     <button
                       onClick={skipUserInput}
                       disabled={loading}
                       className="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-all duration-200 font-medium disabled:opacity-50"
                     >
-                      Skip
+                      {t('skip')}
                     </button>
                   </div>
                 </div>
@@ -940,8 +958,8 @@ export default function TarotPage() {
                   <div className="mb-6">
                     <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600"></div>
                   </div>
-                  <p className="text-2xl text-gray-700 mb-4 font-medium">Divining...</p>
-                  <p className="text-gray-600">Weaving the threads of past, present, and future into your story</p>
+                  <p className="text-2xl text-gray-700 mb-4 font-medium">{t('divining')}</p>
+                  <p className="text-gray-600">{t('diviningHint')}</p>
                 </div>
               )}
 
@@ -949,7 +967,7 @@ export default function TarotPage() {
               {step.includes('reading') && aiInterpretation && !isDivining && (
                 <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-200 rounded-lg p-6 space-y-4">
                   <h3 className="text-2xl font-semibold text-gray-800">
-                    {step === 'combined-reading' ? 'Your Complete Reading' : `The ${selectedCards[currentCardIndex].position} Card`}
+                    {step === 'combined-reading' ? t('yourCompleteReading') : t('theCard', { position: getPositionName(selectedCards[currentCardIndex].position) })}
                   </h3>
                   <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                     {aiInterpretation}
@@ -960,7 +978,7 @@ export default function TarotPage() {
                       onClick={moveToNextCard}
                       className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium"
                     >
-                      Continue to {selectedCards[currentCardIndex + 1].position} Card
+                      {t('continueToCard', { position: getPositionName(selectedCards[currentCardIndex + 1].position) })}
                     </button>
                   )}
                   
@@ -970,7 +988,7 @@ export default function TarotPage() {
                       disabled={loading}
                       className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 font-medium text-lg shadow-lg disabled:opacity-50"
                     >
-                      {loading ? 'Weaving the story...' : 'Get Combined Reading'}
+                      {loading ? t('weavingStory') : t('getCombinedReading')}
                     </button>
                   )}
 
@@ -983,13 +1001,13 @@ export default function TarotPage() {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
-                        Download Reading as PDF
+                        {t('downloadPDF')}
                       </button>
                       <button
                         onClick={resetReading}
                         className="w-full px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all duration-200 font-medium"
                       >
-                        New Reading
+                        {t('newReading')}
                       </button>
                     </div>
                   )}
@@ -1009,7 +1027,7 @@ export default function TarotPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Previous Step
+                  {t('previousStep')}
                 </button>
               ) : (
                 <div></div>
@@ -1020,7 +1038,7 @@ export default function TarotPage() {
                   onClick={goToNextStep}
                   className="flex items-center gap-2 px-6 py-3 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-all duration-200 font-medium"
                 >
-                  Next Step
+                  {t('nextStep')}
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                   </svg>

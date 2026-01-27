@@ -1,0 +1,92 @@
+{
+  "navigation": {
+    "title": "Buster's Tarot Card Reader",
+    "newReading": "New Reading",
+    "contactCreator": "Contact Creator",
+    "confirmNewReading": "Start a new reading? This will clear your current session."
+  },
+  "tarot": {
+    "title": "Tarot Card Reading",
+    "subtitle": "Three Card Spread: Past • Present • Future",
+    "questionLabel": "What question do you seek guidance on?",
+    "questionHint": "More context gives for a more accurate reading. Everything you write is completely private.",
+    "questionPlaceholder": "What do I need to know about my career path? What concerns me? What am I hoping to understand?",
+    "voiceInput": "Voice input",
+    "wordCountLow": "More context needed to divine...",
+    "wordCountMedium": "Good... Keep digging!",
+    "wordCountHigh": "Excellent!",
+    "word": "word",
+    "words": "words",
+    "focusHint": "Take a moment to center yourself and focus on your question. The cards will respond to your energy.",
+    "beginReading": "Begin Reading",
+    "shuffling": "Shuffling the deck...",
+    "shufflingHint": "Focus on your question as the cards align with your energy",
+    "clickToRevealPast": "Click to turn over the Past card",
+    "clickToRevealPresent": "Click to turn over the Present card",
+    "clickToRevealFuture": "Click to turn over the Future card",
+    "reversed": "REVERSED",
+    "upright": "UPRIGHT",
+    "past": "Past",
+    "present": "Present",
+    "future": "Future",
+    "cardBack": "Card Back",
+    "clickToReveal": "Click to reveal",
+    "tapToReveal": "Tap to reveal",
+    "swipeHint": "← Swipe to view all cards →",
+    "scrollDown": "Scroll down",
+    "whatDoYouSee": "What do you see in the {position} card?",
+    "interpretationPrompt": "Before I share the traditional interpretation, what springs to mind when you look at this card? What catches your attention in relation to your question?",
+    "interpretationPlaceholder": "Share your thoughts... what do you notice? what feelings arise?",
+    "shareAndGetReading": "Share & Get Reading",
+    "gettingReading": "Getting reading...",
+    "skip": "Skip",
+    "divining": "Divining...",
+    "diviningHint": "Weaving the threads of past, present, and future into your story",
+    "yourCompleteReading": "Your Complete Reading",
+    "theCard": "The {position} Card",
+    "continueToCard": "Continue to {position} Card",
+    "getCombinedReading": "Get Combined Reading",
+    "weavingStory": "Weaving the story...",
+    "downloadPDF": "Download Reading as PDF",
+    "newReading": "New Reading",
+    "previousStep": "Previous Step",
+    "nextStep": "Next Step",
+    "viewCard": "View {position} card"
+  },
+  "errors": {
+    "enterQuestion": "Please enter your question or focus",
+    "shareOrSkip": "Please share your interpretation or click \"Skip\" to get the reading directly",
+    "connectionError": "Unable to connect to the reading service. Please check your API key and try again.",
+    "connectionErrorShort": "Unable to connect to the reading service.",
+    "failedReading": "Failed to get reading",
+    "failedCombinedReading": "Failed to get combined reading"
+  },
+  "pdf": {
+    "title": "Tarot Card Reading",
+    "yourQuestion": "Your Question:",
+    "cardsDrawn": "Cards Drawn:",
+    "interpretation": "{position} Card Interpretation:",
+    "combinedReading": "Combined Reading:",
+    "readingNotAvailable": "Reading not available",
+    "reversed": "Reversed",
+    "upright": "Upright",
+    "footer1": "Tarot Card Reading made with <3 by Buster Franken",
+    "footer2": "Message me on WhatsApp at +31624877967 for more divinations,",
+    "footer3": "suggestions about the app or other questions"
+  },
+  "voice": {
+    "disabled": "Voice input disabled",
+    "stopRecording": "Click to stop recording",
+    "transcribing": "Transcribing...",
+    "errorRetry": "Error occurred, click to try again",
+    "ready": "Ready! Click to record",
+    "startRecording": "Click to start voice input"
+  },
+  "home": {
+    "loading": "Loading tarot reading..."
+  },
+  "metadata": {
+    "title": "Buster's Tarot Card Reader",
+    "description": "Get inspired with random motivational quotes and receive authentic tarot card readings"
+  }
+}

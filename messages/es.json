@@ -1,0 +1,92 @@
+{
+  "navigation": {
+    "title": "Lector de Tarot de Buster",
+    "newReading": "Nueva Lectura",
+    "contactCreator": "Contactar Creador",
+    "confirmNewReading": "¿Iniciar una nueva lectura? Esto borrará tu sesión actual."
+  },
+  "tarot": {
+    "title": "Lectura de Cartas del Tarot",
+    "subtitle": "Tirada de Tres Cartas: Pasado • Presente • Futuro",
+    "questionLabel": "¿Sobre qué pregunta buscas orientación?",
+    "questionHint": "Más contexto permite una lectura más precisa. Todo lo que escribes es completamente privado.",
+    "questionPlaceholder": "¿Qué necesito saber sobre mi camino profesional? ¿Qué me preocupa? ¿Qué espero entender?",
+    "voiceInput": "Entrada de voz",
+    "wordCountLow": "Se necesita más contexto para adivinar...",
+    "wordCountMedium": "Bien... ¡Sigue profundizando!",
+    "wordCountHigh": "¡Excelente!",
+    "word": "palabra",
+    "words": "palabras",
+    "focusHint": "Tómate un momento para centrarte y enfocarte en tu pregunta. Las cartas responderán a tu energía.",
+    "beginReading": "Comenzar Lectura",
+    "shuffling": "Barajando el mazo...",
+    "shufflingHint": "Concéntrate en tu pregunta mientras las cartas se alinean con tu energía",
+    "clickToRevealPast": "Haz clic para voltear la carta del Pasado",
+    "clickToRevealPresent": "Haz clic para voltear la carta del Presente",
+    "clickToRevealFuture": "Haz clic para voltear la carta del Futuro",
+    "reversed": "INVERTIDA",
+    "upright": "DERECHA",
+    "past": "Pasado",
+    "present": "Presente",
+    "future": "Futuro",
+    "cardBack": "Reverso de Carta",
+    "clickToReveal": "Clic para revelar",
+    "tapToReveal": "Toca para revelar",
+    "swipeHint": "← Desliza para ver todas las cartas →",
+    "scrollDown": "Desplázate hacia abajo",
+    "whatDoYouSee": "¿Qué ves en la carta del {position}?",
+    "interpretationPrompt": "Antes de compartir la interpretación tradicional, ¿qué te viene a la mente cuando miras esta carta? ¿Qué llama tu atención en relación con tu pregunta?",
+    "interpretationPlaceholder": "Comparte tus pensamientos... ¿qué notas? ¿qué sentimientos surgen?",
+    "shareAndGetReading": "Compartir y Obtener Lectura",
+    "gettingReading": "Obteniendo lectura...",
+    "skip": "Omitir",
+    "divining": "Adivinando...",
+    "diviningHint": "Tejiendo los hilos del pasado, presente y futuro en tu historia",
+    "yourCompleteReading": "Tu Lectura Completa",
+    "theCard": "La Carta del {position}",
+    "continueToCard": "Continuar a la Carta del {position}",
+    "getCombinedReading": "Obtener Lectura Combinada",
+    "weavingStory": "Tejiendo la historia...",
+    "downloadPDF": "Descargar Lectura como PDF",
+    "newReading": "Nueva Lectura",
+    "previousStep": "Paso Anterior",
+    "nextStep": "Siguiente Paso",
+    "viewCard": "Ver carta del {position}"
+  },
+  "errors": {
+    "enterQuestion": "Por favor, introduce tu pregunta o enfoque",
+    "shareOrSkip": "Por favor, comparte tu interpretación o haz clic en \"Omitir\" para obtener la lectura directamente",
+    "connectionError": "No se puede conectar con el servicio de lectura. Por favor, verifica tu clave API e inténtalo de nuevo.",
+    "connectionErrorShort": "No se puede conectar con el servicio de lectura.",
+    "failedReading": "Error al obtener la lectura",
+    "failedCombinedReading": "Error al obtener la lectura combinada"
+  },
+  "pdf": {
+    "title": "Lectura de Cartas del Tarot",
+    "yourQuestion": "Tu Pregunta:",
+    "cardsDrawn": "Cartas Extraídas:",
+    "interpretation": "Interpretación de la Carta del {position}:",
+    "combinedReading": "Lectura Combinada:",
+    "readingNotAvailable": "Lectura no disponible",
+    "reversed": "Invertida",
+    "upright": "Derecha",
+    "footer1": "Lectura de Cartas del Tarot hecha con <3 por Buster Franken",
+    "footer2": "Escríbeme en WhatsApp al +31624877967 para más adivinaciones,",
+    "footer3": "sugerencias sobre la app u otras preguntas"
+  },
+  "voice": {
+    "disabled": "Entrada de voz desactivada",
+    "stopRecording": "Clic para detener la grabación",
+    "transcribing": "Transcribiendo...",
+    "errorRetry": "Ocurrió un error, clic para reintentar",
+    "ready": "¡Listo! Clic para grabar",
+    "startRecording": "Clic para iniciar entrada de voz"
+  },
+  "home": {
+    "loading": "Cargando lectura de tarot..."
+  },
+  "metadata": {
+    "title": "Lector de Tarot de Buster",
+    "description": "Inspírate con citas motivacionales aleatorias y recibe lecturas auténticas de cartas del tarot"
+  }
+}

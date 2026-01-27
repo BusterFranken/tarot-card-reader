@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useVoiceInput, VoiceInputStatus } from '../hooks/useVoiceInput'
 
 interface VoiceInputButtonProps {
@@ -18,6 +19,7 @@ export default function VoiceInputButton({
   disabled = false,
   className = ''
 }: VoiceInputButtonProps) {
+  const t = useTranslations('voice')
   const { status, error, startRecording, stopRecording, warmUp, coolDown, isSupported } = useVoiceInput({
     onTranscript,
   })
@@ -115,18 +117,18 @@ export default function VoiceInputButton({
   }
 
   const getTooltip = () => {
-    if (disabled) return 'Voice input disabled'
+    if (disabled) return t('disabled')
     switch (status) {
       case 'recording':
-        return 'Click to stop recording'
+        return t('stopRecording')
       case 'processing':
-        return 'Transcribing...'
+        return t('transcribing')
       case 'error':
-        return error || 'Error occurred, click to try again'
+        return error || t('errorRetry')
       case 'ready':
-        return 'Ready! Click to record'
+        return t('ready')
       default:
-        return 'Click to start voice input'
+        return t('startRecording')
     }
   }
 

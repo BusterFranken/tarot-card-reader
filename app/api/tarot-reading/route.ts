@@ -57,13 +57,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { card, question, userInterpretation, conversationHistory, position, isReversed, allCards } = body
+    const { card, question, userInterpretation, conversationHistory, position, isReversed, allCards, locale } = body
+    
+    // Language mapping for AI responses
+    const languageNames: Record<string, string> = {
+      en: 'English',
+      nl: 'Dutch',
+      de: 'German',
+      es: 'Spanish',
+      fr: 'French',
+    }
+    const responseLang = languageNames[locale] || 'English'
     
     // Build the conversation messages
     const messages: any[] = [
       {
         role: "system",
-        content: `You are an experienced, warm, and insightful tarot card reader. You provide thoughtful interpretations that help people reflect on their lives. You understand traditional tarot meanings but also connect them to the querent's personal journey. Be authentic, compassionate, and genuine. Keep responses concise but meaningful (2-3 paragraphs).`
+        content: `You are an experienced, warm, and insightful tarot card reader. You provide thoughtful interpretations that help people reflect on their lives. You understand traditional tarot meanings but also connect them to the querent's personal journey. Be authentic, compassionate, and genuine. Keep responses concise but meaningful (2-3 paragraphs). IMPORTANT: You MUST respond entirely in ${responseLang}.`
       }
     ]
 

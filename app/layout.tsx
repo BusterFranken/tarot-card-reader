@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import './globals.css'
 import Navigation from './components/Navigation'
 
@@ -7,16 +9,21 @@ export const metadata: Metadata = {
   description: 'Get inspired with random motivational quotes and receive authentic tarot card readings',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className="antialiased">
-        <Navigation />
-        {children}
+        <NextIntlClientProvider messages={messages}>
+          <Navigation />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   )
