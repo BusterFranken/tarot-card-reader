@@ -603,10 +603,6 @@ export default function TarotPage() {
 
       <div className="max-w-6xl w-full relative z-10">
         <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-12">
-          <p className="text-center text-gray-600 mb-8 text-sm">
-            {t('subtitle')}
-          </p>
-
           {step === 'question' && (
             <div className="space-y-6">
               <div className="w-full md:w-1/2 mx-auto rounded-xl overflow-hidden shadow-lg">
