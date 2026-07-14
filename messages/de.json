@@ -8,6 +8,7 @@
   "tarot": {
     "title": "Tarotkarten-Lesung",
     "subtitle": "Drei-Karten-Spread: Vergangenheit • Gegenwart • Zukunft",
+    "heroImageAlt": "Eine Wahrsagerin, die bei Kerzenlicht in ihrem Wagen Tarotkarten liest.",
     "questionLabel": "Zu welcher Frage suchst du Führung?",
     "questionHint": "Mehr Kontext ermöglicht eine genauere Lesung. Alles, was du schreibst, ist vollständig privat.",
     "questionPlaceholder": "Was muss ich über meinen Karriereweg wissen? Was besorgt mich? Was hoffe ich zu verstehen?",
