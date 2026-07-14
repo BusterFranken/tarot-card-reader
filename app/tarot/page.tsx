@@ -620,9 +620,6 @@ export default function TarotPage() {
                 <label className="block text-gray-700 font-medium mb-2 text-lg">
                   {t('questionLabel')}
                 </label>
-                <p className="mb-3 text-sm text-gray-400">
-                  {t('questionHint')}
-                </p>
                 <div className="relative">
                   <textarea
                     value={question}
@@ -661,9 +658,6 @@ export default function TarotPage() {
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-500 mt-3">
-                  {t('focusHint')}
-                </p>
               </div>
               <button
                 onClick={startReading}
