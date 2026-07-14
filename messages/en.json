@@ -8,6 +8,7 @@
   "tarot": {
     "title": "Tarot Card Reading",
     "subtitle": "Three Card Spread: Past • Present • Future",
+    "heroImageAlt": "A fortune teller reading tarot cards by candlelight in her caravan.",
     "questionLabel": "What question do you seek guidance on?",
     "questionHint": "More context gives for a more accurate reading. Everything you write is completely private.",
     "questionPlaceholder": "What do I need to know about my career path? What concerns me? What am I hoping to understand?",

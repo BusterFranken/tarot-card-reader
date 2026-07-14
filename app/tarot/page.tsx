@@ -612,6 +612,17 @@ export default function TarotPage() {
 
           {step === 'question' && (
             <div className="space-y-6">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <Image
+                  src="/fortune-teller.jpg"
+                  alt={t('heroImageAlt')}
+                  width={1400}
+                  height={763}
+                  className="w-full h-auto"
+                  priority
+                  unoptimized
+                />
+              </div>
               <div>
                 <label className="block text-gray-700 font-medium mb-2 text-lg">
                   {t('questionLabel')}

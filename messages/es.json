@@ -8,6 +8,7 @@
   "tarot": {
     "title": "Lectura de Cartas del Tarot",
     "subtitle": "Tirada de Tres Cartas: Pasado • Presente • Futuro",
+    "heroImageAlt": "Una adivina leyendo cartas del tarot a la luz de las velas en su caravana.",
     "questionLabel": "¿Sobre qué pregunta buscas orientación?",
     "questionHint": "Más contexto permite una lectura más precisa. Todo lo que escribes es completamente privado.",
     "questionPlaceholder": "¿Qué necesito saber sobre mi camino profesional? ¿Qué me preocupa? ¿Qué espero entender?",

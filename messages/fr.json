@@ -8,6 +8,7 @@
   "tarot": {
     "title": "Lecture de Cartes de Tarot",
     "subtitle": "Tirage à Trois Cartes : Passé • Présent • Futur",
+    "heroImageAlt": "Une diseuse de bonne aventure lisant les cartes de tarot à la lueur d'une bougie dans sa roulotte.",
     "questionLabel": "Sur quelle question cherchez-vous des conseils ?",
     "questionHint": "Plus de contexte permet une lecture plus précise. Tout ce que vous écrivez est entièrement privé.",
     "questionPlaceholder": "Que dois-je savoir sur mon parcours professionnel ? Qu'est-ce qui me préoccupe ? Qu'est-ce que j'espère comprendre ?",
