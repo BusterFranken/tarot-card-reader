@@ -3,7 +3,7 @@
 # Script to connect this project to GitHub
 # Run this after creating the repository on GitHub
 
-echo "🚀 Setting up GitHub repository for Tarot Card Reader"
+echo "🚀 Setting up GitHub repository for Buster's Tarot Card Reader"
 echo ""
 
 # Check if remote already exists

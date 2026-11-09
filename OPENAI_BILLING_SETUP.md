@@ -40,14 +40,14 @@ You can pre-purchase credits if you prefer:
 ## Cost Expectations
 
 ### This App's Usage
-- **Model**: GPT-4o-mini (cheapest option)
-- **Per reading**: ~$0.01 or less
+- **Model**: GPT-6.1 Terra (`gpt-6.1-terra`)
+- **Per reading**: ~$0.01
 - **100 readings**: ~$1
 - **500 readings**: ~$5
 
 ### OpenAI Pricing
-- **Input**: $0.150 per 1M tokens
-- **Output**: $0.600 per 1M tokens
+- **Input**: $1.00 per 1M tokens
+- **Output**: $5.00 per 1M tokens
 
 Each tarot reading uses about:
 - 200-400 input tokens

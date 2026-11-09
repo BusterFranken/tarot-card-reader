@@ -12,7 +12,7 @@ If you copy it, you have to use your own OpenAI key saved in your .env.local :)
 - **Complete 78-card deck** (Major Arcana + Minor Arcana)
 - **Three-card spread**: Past, Present, Future
 - **Click-to-reveal cards** with smooth animations and hover effects
-- **AI-powered interpretations** using OpenAI GPT-4o-mini
+- **AI-powered interpretations** using OpenAI GPT-6.1 Terra
 - **Conversational context** - each card reading builds on the previous
 - **Personal reflection prompts** - share your initial impressions before the AI reading
 - **Combined narrative** - AI weaves all three cards into a cohesive story
@@ -86,7 +86,6 @@ Visit [http://localhost:3000](http://localhost:3000)
 │   └── page.tsx              # Redirects to tarot
 ├── public/
 │   └── cards/                # All 78 tarot card images + backs
-├── amplify.yml               # AWS Amplify build configuration
 └── ENV_SETUP.md              # Environment variable guide
 ```
 
@@ -98,7 +97,7 @@ Visit [http://localhost:3000](http://localhost:3000)
 - Each card has a 50% chance of appearing reversed
 
 ### AI Interpretation
-The app uses **OpenAI's GPT-4o-mini** to provide:
+The app uses **OpenAI's GPT-6.1 Terra** (`gpt-6.1-terra`) to provide:
 - Context-aware readings that build on previous cards
 - Integration of user's personal insights and reflections
 - Traditional tarot meanings blended with modern, relatable guidance
@@ -113,46 +112,23 @@ The AI maintains conversation history throughout the reading:
 
 ## 💰 Cost Considerations
 
-Using GPT-4o-mini is very affordable:
-- **~$0.01 or less per complete reading** (4 API calls)
-- Input: $0.150 per 1M tokens
-- Output: $0.600 per 1M tokens
+Using GPT-6.1 Terra is affordable:
+- **~$0.01 per complete reading** (4 API calls)
+- Input: $1.00 per 1M tokens
+- Output: $5.00 per 1M tokens
+- Voice input uses `gpt-transcribe` at $0.0045 per minute of audio
 
 See [ENV_SETUP.md](ENV_SETUP.md) for more details.
 
-## 🌐 Deploying to AWS Amplify
+## 🌐 Deployment (Vercel)
 
-This app is fully compatible with AWS Amplify hosting.
+The live site (www.tarotread.help) is hosted on [Vercel](https://vercel.com), connected to this GitHub repository.
 
-### Quick Deploy
+- **Production:** every push or merge to `main` deploys to www.tarotread.help automatically.
+- **Previews:** every pull request gets its own preview URL, posted on the PR by the Vercel check.
+- **Environment variables:** `OPENAI_API_KEY` is set in the Vercel project under Settings → Environment Variables. Redeploy after changing it.
 
-1. **Push to GitHub**
-```bash
-git add .
-git commit -m "Initial commit"
-git push origin main
-```
-
-2. **Connect to AWS Amplify**
-   - Go to [AWS Amplify Console](https://console.aws.amazon.com/amplify)
-   - Click "New app" → "Host web app"
-   - Connect your GitHub repository
-   - Amplify will auto-detect Next.js and use the included `amplify.yml`
-
-3. **Add Environment Variables**
-   - In Amplify Console: App settings → Environment variables
-   - Add: `OPENAI_API_KEY` = `sk-your-key-here`
-   - Save and redeploy
-
-See [ENV_SETUP.md](ENV_SETUP.md) for detailed AWS setup instructions.
-
-### Build Configuration
-
-The included `amplify.yml` configures:
-- Automatic dependency installation
-- Next.js build optimization
-- Caching for faster builds
-- Static and dynamic content handling
+No build configuration file is needed; Vercel detects Next.js automatically.
 
 ## 🔒 Security Notes
 
