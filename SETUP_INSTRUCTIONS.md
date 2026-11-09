@@ -1,4 +1,4 @@
-# 🎴 Tarot Card Reader - Setup Instructions
+# 🎴 Buster's Tarot Card Reader - Setup Instructions
 
 ## What I Need From You
 
