@@ -23,23 +23,25 @@ OPENAI_API_KEY=sk-your-actual-key-here
 
 ⚠️ **NEVER commit your `.env.local` file to Git!** It's already in `.gitignore`.
 
-#### Setting Up on AWS Amplify:
+#### Setting Up on Vercel:
 
-1. Go to your app in the AWS Amplify Console
-2. Navigate to "App settings" → "Environment variables"
-3. Click "Manage variables"
-4. Add a new variable:
+1. Go to the project in the [Vercel dashboard](https://vercel.com/dashboard)
+2. Navigate to "Settings" → "Environment Variables"
+3. Add a new variable:
    - Key: `OPENAI_API_KEY`
    - Value: `sk-your-actual-key-here`
-5. Save and redeploy
+   - Environments: Production and Preview
+4. Save, then redeploy for the change to take effect
 
 ## Cost Considerations
 
-This app uses **GPT-4o-mini** which is very affordable:
-- **Input**: $0.150 per 1M tokens (~$0.15 per 1000 readings)
-- **Output**: $0.600 per 1M tokens
+This app uses **GPT-6.1 Terra** (`gpt-6.1-terra`) for readings:
+- **Input**: $1.00 per 1M tokens
+- **Output**: $5.00 per 1M tokens
 
-Each tarot reading typically costs **less than $0.01** (about 4 API calls per complete reading).
+Each complete tarot reading costs **about $0.01** (4 API calls per complete reading).
+
+Voice input uses **`gpt-transcribe`** at $0.0045 per minute of audio.
 
 ## Testing Without OpenAI
 

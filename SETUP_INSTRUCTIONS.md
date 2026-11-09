@@ -82,7 +82,7 @@ You should be automatically redirected to the tarot reading page!
 ✅ **All Your Requirements:**
 
 1. ✅ **OpenAI Integration**
-   - Uses GPT-4o-mini for cost-effective readings
+   - Uses GPT-6.1 Terra for rich, insightful readings
    - Maintains conversation context throughout reading
    - Provides warm, insightful interpretations
 
@@ -108,11 +108,10 @@ You should be automatically redirected to the tarot reading page!
    - Removed motivational quotes feature
    - Clean, focused experience
 
-6. ✅ **AWS Amplify Ready**
-   - Included `amplify.yml` for easy deployment
-   - Optimized build configuration
-   - Environment variable support
-   - All dependencies compatible with serverless
+6. ✅ **Hosted on Vercel**
+   - Merges to `main` deploy to www.tarotread.help automatically
+   - Every pull request gets a preview URL
+   - `OPENAI_API_KEY` set in Vercel project settings
 
 ## Project Structure
 
@@ -131,17 +130,15 @@ demo-project/
 ├── public/
 │   └── cards/                        # All card images
 ├── .env.local                        # YOUR API KEY (create this!)
-├── amplify.yml                       # AWS deployment config
 ├── ENV_SETUP.md                      # Detailed env var guide
-├── AWS_AMPLIFY_DEPLOY.md             # Deployment guide
 └── README.md                         # Full documentation
 ```
 
 ## Cost Information
 
 ### OpenAI Usage
-- **Model**: GPT-4o-mini (most cost-effective)
-- **Per reading**: ~$0.01 or less
+- **Model**: GPT-6.1 Terra (`gpt-6.1-terra`)
+- **Per reading**: ~$0.01
 - **4 API calls per reading**:
   1. Past card interpretation
   2. Present card interpretation
@@ -153,8 +150,6 @@ demo-project/
 - 500 readings: ~$5
 - 1,000 readings: ~$10
 
-Much cheaper than GPT-4!
-
 ## Next Steps
 
 ### For Local Development:
@@ -162,18 +157,15 @@ Much cheaper than GPT-4!
 2. Run `npm run dev`
 3. Test the full flow
 
-### For Deployment to AWS:
-1. Read `AWS_AMPLIFY_DEPLOY.md`
-2. Push code to GitHub
-3. Connect to AWS Amplify
-4. Add environment variables in Amplify Console
-5. Deploy!
+### For Deployment:
+1. Open a pull request and check the Vercel preview URL
+2. Merge to `main` — Vercel deploys to www.tarotread.help automatically
+3. Manage `OPENAI_API_KEY` in Vercel project settings (see `ENV_SETUP.md`)
 
 ## Files You Should Read
 
 1. **ENV_SETUP.md** - Environment variables and API keys
-2. **AWS_AMPLIFY_DEPLOY.md** - Complete deployment guide
-3. **README.md** - Full project documentation
+2. **README.md** - Full project documentation, including deployment
 
 ## Support
 
