@@ -123,10 +123,9 @@ export async function POST(request: NextRequest) {
     let completion
     try {
       completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-6-luna",
         messages: messages,
-        temperature: 0.7,
-        max_tokens: 500,
+        max_completion_tokens: 500,
       })
     } catch (apiError: any) {
       console.error('OpenAI API call error:', apiError)
@@ -147,8 +146,7 @@ export async function POST(request: NextRequest) {
           details: apiError.message,
           code: apiError.code,
           status: apiError.status,
-          keyPresent: true,
-          keyPreview: `${apiKey.substring(0, 10)}...${apiKey.substring(apiKey.length - 4)}`
+          keyPresent: true
         },
         { status: 500 }
       )

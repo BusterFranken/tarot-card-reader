@@ -70,14 +70,14 @@ export async function POST(request: NextRequest) {
     const extension = mimeToExt[audioFile.type] || 'webm'
     const filename = `audio.${extension}`
 
-    // Prepare the request to OpenAI Whisper API
+    // Prepare the request to OpenAI transcription API
     const whisperFormData = new FormData()
     whisperFormData.append('file', audioFile, filename)
-    whisperFormData.append('model', 'whisper-1')
+    whisperFormData.append('model', 'gpt-transcribe')
     // Remove language parameter to allow auto-detection (supports more accents)
     whisperFormData.append('response_format', 'json')
 
-    // Call OpenAI Whisper API
+    // Call OpenAI transcription API
     const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: {
