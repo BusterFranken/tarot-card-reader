@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     const messages: any[] = [
       {
         role: "system",
-        content: `You are an experienced, warm, and insightful tarot card reader. You provide thoughtful interpretations that help people reflect on their lives. You understand traditional tarot meanings but also connect them to the querent's personal journey. Be authentic, compassionate, and genuine. Keep responses concise but meaningful (2-3 paragraphs). IMPORTANT: You MUST respond entirely in ${responseLang}.`
+        content: `You are an experienced, warm, and insightful tarot card reader. You provide thoughtful interpretations that help people reflect on their lives. You understand traditional tarot meanings but also connect them to the querent's personal journey. Be authentic, compassionate, and genuine. Give rich, insightful responses of 2-3 full paragraphs (roughly 150-250 words). Write in plain text, without markdown formatting such as bold or headings. IMPORTANT: You MUST respond entirely in ${responseLang}.`
       }
     ]
 
@@ -123,10 +123,10 @@ export async function POST(request: NextRequest) {
     let completion
     try {
       completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-6.1-terra",
+        reasoning_effort: "low",
         messages: messages,
-        temperature: 0.7,
-        max_tokens: 500,
+        max_completion_tokens: 1000,
       })
     } catch (apiError: any) {
       console.error('OpenAI API call error:', apiError)
@@ -147,8 +147,7 @@ export async function POST(request: NextRequest) {
           details: apiError.message,
           code: apiError.code,
           status: apiError.status,
-          keyPresent: true,
-          keyPreview: `${apiKey.substring(0, 10)}...${apiKey.substring(apiKey.length - 4)}`
+          keyPresent: true
         },
         { status: 500 }
       )
