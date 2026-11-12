@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { recordReading } from '../../lib/readingCounter'
 
 export async function POST(request: NextRequest) {
   try {
@@ -154,6 +155,11 @@ export async function POST(request: NextRequest) {
     }
 
     const interpretation = completion.choices[0]?.message?.content || "I'm having trouble connecting with the cards right now. Please try again."
+
+    // The combined interpretation is the last step of a reading, so count it as one completed reading.
+    if (allCards && completion.choices[0]?.message?.content) {
+      await recordReading()
+    }
 
     // Return the interpretation and updated conversation history
     const updatedHistory = [

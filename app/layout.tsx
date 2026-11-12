@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
+import { Analytics } from '@vercel/analytics/next'
 import { getLocale, getMessages } from 'next-intl/server'
 import './globals.css'
 import Navigation from './components/Navigation'
@@ -26,6 +27,7 @@ export default async function RootLayout({
           <Navigation />
           {children}
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   )
